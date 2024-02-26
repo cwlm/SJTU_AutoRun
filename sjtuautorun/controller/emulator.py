@@ -9,9 +9,9 @@ import cv2
 
 from sjtuautorun.constants.custom_exceptions import ImageNotFoundErr
 from sjtuautorun.constants.image_templates import make_dir_templates
-from utils.api_image import MyTemplate, convert_position, locateCenterOnImage
-from utils.math_functions import CalcDis
-from utils.new_logger import Logger
+from sjtuautorun.utils.api_image import MyTemplate, convert_position, locateCenterOnImage
+from sjtuautorun.utils.math_functions import CalcDis
+from sjtuautorun.utils.new_logger import Logger
 
 from .android_controller import AndroidController
 from .windows_controller import WindowsController

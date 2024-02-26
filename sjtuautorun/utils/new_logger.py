@@ -3,7 +3,7 @@ import logging
 import os
 import sys
 
-from utils.io import save_image
+from sjtuautorun.utils.io import save_image
 
 # import streamlit as st
 

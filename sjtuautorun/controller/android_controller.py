@@ -3,7 +3,7 @@ import time
 
 from airtest.core.android.android import Android
 
-from utils.api_image import convert_position, relative_to_absolute
+from sjtuautorun.utils.api_image import convert_position, relative_to_absolute
 
 
 class AndroidController:

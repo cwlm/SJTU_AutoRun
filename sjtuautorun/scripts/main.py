@@ -3,8 +3,8 @@ import os
 from types import SimpleNamespace
 
 from sjtuautorun.controller.run_timer import Emulator, Timer
-from utils.io import yaml_to_dict
-from utils.new_logger import Logger
+from sjtuautorun.utils.io import yaml_to_dict
+from sjtuautorun.utils.new_logger import Logger
 
 event_pressed = set()
 script_end = 0
