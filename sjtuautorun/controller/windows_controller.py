@@ -18,13 +18,8 @@ class WindowsController:
     def __init__(self, config, logger) -> None:
         self.logger = logger
 
-        self.emulator = config["type"]  # 模拟器类型
         self.emulator_name = config["emulator_name"]
         self.emulator_dir = config["emulator_dir"]  # 模拟器路径
-        if self.emulator == "蓝叠 Hyper-V":
-            assert config["config_file"], "Bluestacks 需要提供配置文件"
-            self.emulator_config_file = config["config_file"]
-
         self.exe_name = os.path.basename(self.emulator_dir)  # 自动获得模拟器的进程名
 
     # ======================== 网络 ========================
@@ -58,15 +53,7 @@ class WindowsController:
             self.restart_android()
             time.sleep(15)
 
-        if self.emulator == "雷电":
-            dev_name = f"ANDROID:///{self.emulator_name}"
-        elif self.emulator == "蓝叠 Hyper-V":
-            with open(self.emulator_config_file, "r") as f:
-                lines = f.readlines()
-            for line in lines:
-                if line.startswith("bst.instance.Pie64.status.adb_port="):
-                    port = line.split("=")[-1].strip()[1:-1]
-                    dev_name = f"ANDROID:///127.0.0.1:{port}"
+        dev_name = f"ANDROID:///{self.emulator_name}"
 
         from logging import ERROR, getLogger
 

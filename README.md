@@ -2,7 +2,7 @@
 
 ## 项目简介
 
-基于[AutoWSGR](https://github.com/huan-yp/Auto-WSGR)的交我办自动跑步脚本
+基于雷电命令行的交我办自动跑步脚本，脱胎于[AutoWSGR](https://github.com/huan-yp/Auto-WSGR)
 
 ## 近期更新
 
