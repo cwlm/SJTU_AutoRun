@@ -2,10 +2,8 @@ import datetime
 import os
 from types import SimpleNamespace
 
-import keyboard as kd
-
-from controller.run_timer import Emulator, Timer
-from utils.io import recursive_dict_update, yaml_to_dict
+from sjtuautorun.controller.run_timer import Emulator, Timer
+from utils.io import yaml_to_dict
 from utils.new_logger import Logger
 
 event_pressed = set()
@@ -14,7 +12,7 @@ script_end = 0
 
 def initialize_logger_and_config():
     current_folder = os.path.dirname(os.path.abspath(__file__))
-    config = yaml_to_dict(os.path.join(current_folder, os.pardir, "settings.yaml"))
+    config = yaml_to_dict(os.path.join(current_folder, os.pardir, os.pardir, "settings.yaml"))
 
     # set logger
     config["log_dir"] = os.path.join(config["LOG_PATH"], datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))

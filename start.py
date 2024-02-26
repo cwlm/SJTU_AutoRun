@@ -1,2 +1,2 @@
-from scripts.main import start_script
+from sjtuautorun.scripts.main import start_script
 start_script()

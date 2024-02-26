@@ -7,9 +7,7 @@ from subprocess import check_output
 import airtest.core.android.android
 from airtest.core.api import connect_device
 
-from constants.custom_exceptions import CriticalErr
-from constants.data_roots import ADB_ROOT
-from utils.function_wrapper import try_for_times
+from sjtuautorun.constants.custom_exceptions import CriticalErr
 
 
 # Win 和 Android 的通信

@@ -1,6 +1,6 @@
 import numpy as np
 
-from constants.image_templates import MyTemplate
+from sjtuautorun.constants.image_templates import MyTemplate
 
 
 def relative_to_absolute(record_pos, resolution=(540, 960)):

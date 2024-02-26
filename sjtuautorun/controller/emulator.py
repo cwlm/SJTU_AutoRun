@@ -7,8 +7,8 @@ from typing import Iterable, Tuple
 
 import cv2
 
-from constants.custom_exceptions import ImageNotFoundErr
-from constants.image_templates import make_dir_templates
+from sjtuautorun.constants.custom_exceptions import ImageNotFoundErr
+from sjtuautorun.constants.image_templates import make_dir_templates
 from utils.api_image import MyTemplate, convert_position, locateCenterOnImage
 from utils.math_functions import CalcDis
 from utils.new_logger import Logger
