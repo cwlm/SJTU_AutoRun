@@ -37,11 +37,47 @@ print(sjtuautorun.__version__)
 
 能正常显示版本即为成功
 
+### 使用本项目
+
+#### 配置用户文件
+
+修改配置文件的内容, 默认文件在`sjtuautorun/data/default_settings.yaml`，也可以单独写一个配置文件，并在`start_script()`的时候指定.
+
+配置文件模板如下:
+
+```yaml
+emulator:
+  emulator_dir: "" #留空时会使用注册表定位雷电模拟器，并自动填写，未发现
+  config_file: "" #无需填写
+  emulator_name: emulator-5554 # 雷电模拟器使用多开器请填写该项, 不多开默认为 "emulator-5554"
+
+LOG_PATH: "log"
+DELAY: 1.5
+```
+
+#### 开始使用
+
+这一份简单的启动代码:
+
+```python
+from sjtuautorun.scripts.main import start_script
+timer = start_script()
+```
+
+这份代码启动了整个程序并获取了一个控制器 `timer`, `start_script()` 可以有参数, 代表用户设置的路径, 例如:
+
+```python
+from sjtuautorun.scripts.main import start_script
+timer = start_script("C:/path/to/settings/settings.yaml")
+```
+
+如果不指定这个参数, 程序将会使用[默认的用户配置文件]
+(https://github.com/cwlm/SJTU_AutoRun/blob/documentation/sjtuautorun/data/default_settings.yaml)
+运行, 默认文件位于本仓库 `/sjtuautorun/data/default_settings.yaml`.
+
 ## 近期更新
 
 - 完成脚本基本逻辑，实现单个短程自动跑步 *2024/02/26*
-
-## 使用本项目
 
 ## 未来开发任务
 
