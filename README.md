@@ -47,8 +47,7 @@ print(sjtuautorun.__version__)
 
 ```yaml
 emulator:
-  emulator_dir: "" #留空时会使用注册表定位雷电模拟器，并自动填写，未发现
-  config_file: "" #无需填写
+  emulator_dir: "" #留空时会使用注册表定位雷电模拟器，并自动填写
   emulator_name: emulator-5554 # 雷电模拟器使用多开器请填写该项, 不多开默认为 "emulator-5554"
 
 LOG_PATH: "log"
@@ -71,8 +70,8 @@ from sjtuautorun.scripts.main import start_script
 timer = start_script("C:/path/to/settings/settings.yaml")
 ```
 
-如果不指定这个参数, 程序将会使用[默认的用户配置文件]
-(https://github.com/cwlm/SJTU_AutoRun/blob/documentation/sjtuautorun/data/default_settings.yaml)
+如果不指定这个参数, 程序将会使用
+[默认的用户配置文件](https://github.com/cwlm/SJTU_AutoRun/blob/documentation/sjtuautorun/data/default_settings.yaml)
 运行, 默认文件位于本仓库 `/sjtuautorun/data/default_settings.yaml`.
 
 ## 近期更新
