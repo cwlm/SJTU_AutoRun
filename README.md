@@ -16,7 +16,7 @@
 
 [安装 Python](https://zhuanlan.zhihu.com/p/111168324) 注意, Python 版本要求 3.9 <= x <= 3.11, 我们推荐你安装 [Python3.9.13](https://www.python.org/downloads/release/python-3913/).
 
-将模拟器设置为 `>=1280x720` 的 `16:9` 分辨率(推荐使用 1280x720 分辨率).
+将模拟器设置为 `1080x1920` 分辨率.
 
 #### 安装本项目(sjtuautorun)
 
@@ -75,12 +75,16 @@ timer = start_script("C:/path/to/settings/settings.yaml")
 运行, 默认文件位于本仓库 `/sjtuautorun/data/default_settings.yaml`.
 
 ## 近期更新
+- 实现图像识别自启动 *2024/03/02*
 - 重构跑步逻辑，实现不同跑步计划 *2024/03/02*
 - 完成脚本基本逻辑，实现单个短程自动跑步 *2024/02/26*
 
 ## 未来开发任务
 
 - 随机化跑步数据
-- 调整图像识别模块，实现自动启动、结束
 - 不同跑步策略（如光体、南体跑圈等）
+
+
+- 调整图像识别模块，实现自动结束
+- 适配不同交我办语言和字体大小
 
