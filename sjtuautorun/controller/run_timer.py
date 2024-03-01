@@ -1,5 +1,8 @@
+import os
 import numpy as np
 import time
+
+from sjtuautorun.constants.data_roots import DATA_ROOT
 
 from .emulator import Emulator
 
@@ -9,6 +12,11 @@ class Timer(Emulator):
 
     def __init__(self, config, logger):
         super().__init__(config, logger)
+
+        if not self.config.PLAN_ROOT:
+            self.logger.warning(
+                f"No PLAN_ROOT specified, default value {os.path.join(DATA_ROOT, 'plans')} will be used")
+            self.config.PLAN_ROOT = os.path.join(DATA_ROOT, "plans")
 
         self.app_name = "edu.sjtu.infoplus.taskcenter"
 
