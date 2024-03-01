@@ -10,7 +10,7 @@ import cv2
 from sjtuautorun.constants.custom_exceptions import ImageNotFoundErr
 from sjtuautorun.constants.image_templates import make_dir_templates
 from sjtuautorun.utils.api_image import MyTemplate, convert_position, locateCenterOnImage
-from sjtuautorun.utils.math_functions import CalcDis
+from sjtuautorun.utils.math_functions import calculate_distance
 from sjtuautorun.utils.new_logger import Logger
 
 from .android_controller import AndroidController
@@ -159,7 +159,7 @@ class Emulator:
         """
         color = self.get_pixel(*position, screen_shot)
         color.reverse()
-        return CalcDis(color, bgr_color) < distance ** 2
+        return calculate_distance(color, bgr_color) < distance ** 2
 
     def locateCenterOnScreen(self, query: MyTemplate, confidence=0.85, this_methods=None):
         """从屏幕中找出和模板图像匹配度最高的矩阵区域的中心坐标
