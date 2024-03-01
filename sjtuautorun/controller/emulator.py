@@ -264,8 +264,6 @@ class Emulator:
             images (list, optional): 很多图片,可以是列表或字典. Defaults to [].
             confidence (_type_, optional): 置信度. Defaults to 0.85.
             timeout (int, optional): 最长等待时间. Defaults to 10.
-            gap
-            after_get_delay
 
         Raises:
             TypeError: image_list 中有不合法参数
@@ -288,14 +286,15 @@ class Emulator:
             images = images.items()
 
         start_time = time.time()
-        while time.time() - start_time <= timeout:
+        while True:
             self.update_screen()
             for res, image in images:
                 if self.image_exist(image, False, confidence):
                     time.sleep(after_get_delay)
                     return res
             time.sleep(gap)
-        return None
+            if time.time() - start_time > timeout:
+                return None
 
     def wait_images_position(self, images=None, confidence=0.85, gap=0.15, after_get_delay=0, timeout=10):
         """等待一些图片,并返回第一个匹配结果的位置
