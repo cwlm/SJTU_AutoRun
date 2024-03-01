@@ -37,7 +37,7 @@ def initialize_logger_and_config(settings_path):
     return config, logger
 
 
-def start_script(settings_path):
+def start_script(settings_path=None):
     """启动脚本, 返回一个 Timer 记录器.
     :如果模拟器没有运行, 会尝试启动模拟器,
     :如果游戏没有运行, 会自动启动交我办,
@@ -59,12 +59,13 @@ def start_script_emulator(settings_path):
     emulator = Emulator(config, logger)
     return emulator
 
+
 def get_emulator_path():
     try:
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                              r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\leidian9")
         try:
-            path,_ = winreg.QueryValueEx(key, "DisplayIcon")
+            path, _ = winreg.QueryValueEx(key, "DisplayIcon")
             return path
         except FileNotFoundError:
             print("Path not found")

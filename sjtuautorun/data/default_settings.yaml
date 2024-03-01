@@ -1,7 +1,12 @@
 emulator:
   emulator_dir: ""
-  config_file: ""
   emulator_name: emulator-5554 # 雷电模拟器使用多开器请填写该项, 不多开默认为 "emulator-5554"
 
-LOG_PATH: "log"
 DELAY: 1.5
+PLAN_ROOT: # 计划根目录, 如果缺省则默认为 [python packages 目录]/sjtuautorun/data/plans
+
+# ========== Logger设置 ==========
+LOG_PATH: "log"
+DEBUG: True
+SHOW_ANDROID_INPUT: True
+log_level: DEBUG # 调试模式 log_level 应该设置为 DEBUG

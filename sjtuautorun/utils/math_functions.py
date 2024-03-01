@@ -1,7 +1,24 @@
 import numpy as np
+from geopy.distance import geodesic
 
 
-def CalcDis(p1, p2):
+def calculate_geo_distance(lat1, lon1, lat2, lon2):
+    """
+    计算两个经纬度坐标之间的距离
+
+    :param lat1: 第一个点的纬度
+    :param lon1: 第一个点的经度
+    :param lat2: 第二个点的纬度
+    :param lon2: 第二个点的经度
+    :return: 距离（单位：米）
+    """
+    coord1 = (lat1, lon1)
+    coord2 = (lat2, lon2)
+    distance = geodesic(coord1, coord2).meters
+    return distance
+
+
+def calculate_distance(p1, p2):
     """计算两个点的欧几里得距离的平方
     Args:
         p1 : 第一个点的坐标
@@ -24,7 +41,7 @@ def get_nearest(position, points):
         raise ValueError("no color template")
     result = 0 if points[0] is not None else 1
     for i in range(1, len(points)):
-        if CalcDis(position, points[i]) < CalcDis(position, points[result]):
+        if calculate_distance(position, points[i]) < calculate_distance(position, points[result]):
             result = i
     return result
 
