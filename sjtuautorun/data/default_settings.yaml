@@ -5,3 +5,5 @@ emulator:
 
 LOG_PATH: "log"
 DELAY: 1.5
+
+SHOW_ANDROID_INPUT: False

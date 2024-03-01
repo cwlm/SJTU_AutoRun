@@ -59,12 +59,13 @@ def start_script_emulator(settings_path):
     emulator = Emulator(config, logger)
     return emulator
 
+
 def get_emulator_path():
     try:
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                              r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\leidian9")
         try:
-            path,_ = winreg.QueryValueEx(key, "DisplayIcon")
+            path, _ = winreg.QueryValueEx(key, "DisplayIcon")
             return path
         except FileNotFoundError:
             print("Path not found")
