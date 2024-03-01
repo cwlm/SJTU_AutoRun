@@ -75,7 +75,7 @@ timer = start_script("C:/path/to/settings/settings.yaml")
 运行, 默认文件位于本仓库 `/sjtuautorun/data/default_settings.yaml`.
 
 ## 近期更新
-
+- 重构跑步逻辑，实现不同跑步计划 *2024/03/02*
 - 完成脚本基本逻辑，实现单个短程自动跑步 *2024/02/26*
 
 ## 未来开发任务
