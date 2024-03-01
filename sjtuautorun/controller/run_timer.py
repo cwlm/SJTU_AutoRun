@@ -29,8 +29,8 @@ class Timer(Emulator):
             self.Android.start_app(self.app_name)
         else:
             self.restart()
-        res = self.wait_image(IMG.start_image[1])
-        if res is None:
+        pos = self.wait_image(IMG.start_image[1])
+        if pos is None:
             return
         #     if self.image_exist(IMG.setting_image[1]):
         #         pass
@@ -38,13 +38,13 @@ class Timer(Emulator):
         #     else:
         #         self.restart()
 
-        self.Android.click(res[0], res[1])
+        self.Android.click(pos[0], pos[1])
         self.text('去跑步')
 
-        res = self.wait_image(IMG.start_image[2])
-        if res is None:
+        pos = self.wait_image(IMG.start_image[2])
+        if pos is None:
             return
-        self.Android.click(res[0], res[1])
+        self.Android.click(pos[0], pos[1])
         self.logger.info("Start successfully!")
 
     def restart(self, times=0, *args, **kwargs):
