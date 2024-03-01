@@ -20,7 +20,7 @@
 
 #### 安装本项目(sjtuautorun)
 
-autowsgr 目前已支持通过 [PyPI](https://pypi.org/project/sjtuautorun/) 进行部署, 在安装好 Python 后, 打开命令提示符(cmd), 输入以下命令后回车.
+本项目已支持通过 [PyPI](https://pypi.org/project/sjtuautorun/) 进行部署, 在安装好 Python 后, 打开命令提示符(cmd), 输入以下命令后回车.
 
 ```bash
 pip install -U sjtuautorun
