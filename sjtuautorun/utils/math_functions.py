@@ -1,4 +1,21 @@
 import numpy as np
+from geopy.distance import geodesic
+
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    """
+    计算两个经纬度坐标之间的距离
+
+    :param lat1: 第一个点的纬度
+    :param lon1: 第一个点的经度
+    :param lat2: 第二个点的纬度
+    :param lon2: 第二个点的经度
+    :return: 距离（单位：米）
+    """
+    coord1 = (lat1, lon1)
+    coord2 = (lat2, lon2)
+    distance = geodesic(coord1, coord2).meters
+    return distance
 
 
 def CalcDis(p1, p2):
