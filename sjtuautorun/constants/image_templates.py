@@ -110,7 +110,7 @@ def make_dir_templates_without_number(path):
 class ImageSet:
     def __init__(self):
         # identify_images 多图识别，单独处理
-        self.identify_images = make_dir_templates_without_number(f"{IMG_ROOT}/identify_images")
+        # self.identify_images = make_dir_templates_without_number(f"{IMG_ROOT}/identify_images")
 
         for sub_folder in os.listdir(IMG_ROOT):
             if sub_folder not in self.__dict__:

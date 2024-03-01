@@ -1,7 +1,5 @@
 import os
-import numpy as np
 import time
-from PIL import Image
 
 from sjtuautorun.constants.data_roots import *
 
@@ -29,6 +27,7 @@ class Timer(Emulator):
             self.Android.start_app(self.app_name)
         else:
             self.restart()
+            return
         pos = self.wait_image(IMG.start_image[1])
         if pos is None:
             return
@@ -47,7 +46,7 @@ class Timer(Emulator):
         self.Android.click(pos[0], pos[1])
         self.logger.info("Start successfully!")
 
-    def restart(self, times=0, *args, **kwargs):
+    def restart(self, times=0):
         try:
             self.Android.ShellCmd(f"am force-stop {self.app_name}")
             self.Android.ShellCmd("input keyevent 3")
@@ -71,7 +70,7 @@ class Timer(Emulator):
                 raise CriticalErr("CriticalErr on restart function")
 
             self.Windows.connect_android()
-            self.restart(times + 1, *args, **kwargs)
+            self.restart(times + 1)
 
     def run(self):
         self.change_location(121.431588, 31.026867)

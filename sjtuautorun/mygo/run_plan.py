@@ -7,6 +7,7 @@ from sjtuautorun.constants.data_roots import DATA_ROOT
 from sjtuautorun.controller.run_timer import Timer
 from sjtuautorun.utils.io import yaml_to_dict, recursive_dict_update
 from sjtuautorun.utils.math_functions import calculate_geo_distance
+from sjtuautorun.constants.image_templates import IMG
 
 
 class RunPlan:
@@ -26,6 +27,13 @@ class RunPlan:
         assert len(plan_args["points"]) >= 2, "数组长度过短，无法计算相邻元素的和"
 
     def start_run(self):
+        pos = self.timer.wait_image(IMG.run_image[1])
+        self.timer.Android.click(pos[0], pos[1])
+
+        if self.timer.wait_image(IMG.run_image[2]) is not None:
+            self.run()
+
+    def run(self):
         # 初始化位置
         self.timer.change_location(self.plan_args["points"][0][0], self.plan_args["points"][0][1])
 
