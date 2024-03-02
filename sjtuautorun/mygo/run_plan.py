@@ -24,7 +24,7 @@ class RunPlan:
             plan_args = recursive_dict_update(plan_args, user_plan)
 
         self.plan_args = plan_args
-        assert len(plan_args["points"]) >= 2, "数组长度过短，无法计算相邻元素的和"
+        assert len(plan_args["points"]) >= 2, "请输入两个以上途径点"
 
     def start_run(self):
         pos = self.timer.wait_image(IMG.run_image[1])
