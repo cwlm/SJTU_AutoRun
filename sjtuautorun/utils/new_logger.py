@@ -78,7 +78,7 @@ class Logger:
         )
 
     def _get_logger(self, log_level="INFO") -> logging.Logger:
-        logger = logging.getLogger("autowsgr")
+        logger = logging.getLogger("sjtuautorun")
         logger.propagate = False
         logger.handlers = []
         logger.setLevel(log_level)

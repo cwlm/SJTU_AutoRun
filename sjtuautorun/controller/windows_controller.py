@@ -29,7 +29,7 @@ class WindowsController:
         Returns:
             bool:网络正常返回 True,否则返回 False
         """
-        return os.system("ping www.moefantasy.com") == 0
+        return os.system("ping www.sjtu.edu.cn") == 0
 
     def wait_network(self, timeout=1000):
         """等待到网络恢复"""

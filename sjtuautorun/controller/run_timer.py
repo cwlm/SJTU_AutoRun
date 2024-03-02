@@ -29,11 +29,11 @@ class Timer(Emulator):
             self.restart()
             return
         pos = self.wait_image(IMG.start_image[1])
-        if pos is None:
+        if pos is False:
             return
         #     if self.image_exist(IMG.setting_image[1]):
         #         pass
-        #         # To be done: modify the text size or languages
+        #         # TODO: modify the text size or languages
         #     else:
         #         self.restart()
 
