@@ -16,7 +16,7 @@
 
 [安装 Python](https://zhuanlan.zhihu.com/p/111168324) 注意, Python 版本要求 3.9 <= x <= 3.11, 我们推荐你安装 [Python3.9.13](https://www.python.org/downloads/release/python-3913/).
 
-将模拟器设置为 `1080x1920` 分辨率.
+将模拟器设置为 `1080x1920` 分辨率, 并设置为`手机版`.
 
 #### 安装本项目(sjtuautorun)
 
