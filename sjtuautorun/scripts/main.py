@@ -26,6 +26,9 @@ def initialize_logger_and_config(settings_path):
               f"{os.path.join(os.path.dirname(sjtuautorun.__file__), 'data', 'default_settings.yaml')}"
               f" will be used.")
         print("=========End===========")
+        if config["emulator"]["emulator_dir"] == "":
+            config["emulator"]["emulator_dir"] = get_emulator_path()
+
 
     # set logger
     config["log_dir"] = os.path.join(config["LOG_PATH"], datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
