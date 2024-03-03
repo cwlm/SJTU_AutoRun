@@ -269,9 +269,9 @@ class Emulator:
             TypeError: image_list 中有不合法参数
 
         Returns:
-            None: 未找到任何图片
-            a number of int: 第一个出现的图片的下标(0-based) if images is a list
-            the key of the value: if images is a dict
+            if images is a list, return the index of the first image that appears
+            if images is a dict, return the key of the value
+            if not found, return None
         """
         if timeout < 0:
             raise ValueError("arg 'timeout' should at least be 0 but is ", str(timeout))

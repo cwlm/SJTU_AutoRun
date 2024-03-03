@@ -28,21 +28,32 @@ class Timer(Emulator):
         else:
             self.restart()
             return
-        pos = self.wait_image(IMG.start_image[1])
-        if pos is None:
+
+        ret = self.wait_images(IMG.start_image[1:3])
+        # 打开应用后可能会出现的状态:
+        # None: 打开失败或者字体不正确
+        # 0: 预期结果
+        # 1: 出现交我办更新，这里选择直接叉掉更新页
+        if ret is None:
+            self.set_text_size()
+            self.restart()
             return
-        #     if self.image_exist(IMG.setting_image[1]):
-        #         pass
-        #         # To be done: modify the text size or languages
-        #     else:
-        #         self.restart()
+        elif ret == 0:
+            pass
+        elif ret == 1:
+            pos = self.wait_image(IMG.start_image[2])
+            self.click(pos[0], pos[1])
+
+        pos = self.wait_image(IMG.start_image[1])
+        if not pos:
+            raise CriticalErr("Cannot find the searching bar")
 
         self.Android.click(pos[0], pos[1])
         self.text('去跑步')
 
-        pos = self.wait_image(IMG.start_image[2])
+        pos = self.wait_image(IMG.start_image[3])
         if pos is None:
-            return
+            raise CriticalErr("Cannot find the go running icon")
         self.Android.click(pos[0], pos[1])
         self.logger.info("Start successfully!")
 
@@ -75,3 +86,35 @@ class Timer(Emulator):
     def run(self):
         self.change_location(121.431588, 31.026867)
         time.sleep(10)
+
+    def set_text_size(self):
+        # 点击设置
+        pos = self.wait_image(IMG.setting_image[1])
+        if not pos:
+            return False
+        self.Android.click(pos[0], pos[1])
+
+        # 点击调节字体
+        pos = self.wait_image(IMG.setting_image[2])
+        if not pos:
+            raise CriticalErr("Set text size failed!")
+        self.Android.click(pos[0], pos[1])
+
+        # 点击小号字体
+        pos = self.wait_image(IMG.setting_image[3])
+        if not pos:
+            raise CriticalErr("Set text size failed!")
+        self.Android.click(pos[0], pos[1])
+
+        # 点击返回
+        pos = self.wait_image(IMG.setting_image[4])
+        if not pos:
+            raise CriticalErr("Set text size failed!")
+        self.Android.click(pos[0], pos[1])
+
+        # 点击确定
+        pos = self.wait_image(IMG.setting_image[5])
+        if not pos:
+            raise CriticalErr("Set text size failed!")
+        self.Android.click(pos[0], pos[1])
+        return True
