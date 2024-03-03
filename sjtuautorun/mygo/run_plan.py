@@ -27,6 +27,10 @@ class RunPlan:
         assert len(plan_args["points"]) >= 2, "请输入两个以上途径点"
 
     def start_run(self):
+        # 初始化位置
+        self.timer.change_location(self.plan_args["points"][0][0], self.plan_args["points"][0][1])
+
+        # 启动跑步
         pos = self.timer.wait_image(IMG.run_image[1])
         self.timer.Android.click(pos[0], pos[1])
 
@@ -34,11 +38,6 @@ class RunPlan:
             self.run()
 
     def run(self):
-        # 初始化位置
-        self.timer.change_location(self.plan_args["points"][0][0], self.plan_args["points"][0][1])
-
-        # 启动跑步
-        # 还没做
         time.sleep(5)
 
         for i in range(len(self.plan_args["points"]) - 1):
