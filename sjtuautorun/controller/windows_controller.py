@@ -43,9 +43,10 @@ class WindowsController:
         return False
 
     # ======================== 模拟器 ========================
-    def ldconsole(self, command, command_arg=None):
+    def ldconsole(self, command, command_arg=""):
         console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
-        os.popen(console_dir + " " + command + " --index " + str(self.emulator_index) + " " + command_arg)
+        ret = os.popen(console_dir + " " + command + " --index " + str(self.emulator_index) + " " + command_arg)
+        return ret.read()
 
     # @try_for_times()
     def connect_android(self) -> airtest.core.android.android.Android:
@@ -80,21 +81,17 @@ class WindowsController:
         Returns:
             bool: 在线返回 True, 否则返回 False
         """
-        raw_res = check_output(f'tasklist /fi "ImageName eq {self.exe_name}').decode(
-            "gbk")
-        return "PID" in raw_res
+        raw_res = self.ldconsole("isrunning")
+        self.logger.info(raw_res)
+        return raw_res == 'running'
 
     def kill_android(self):
-        try:
-            subprocess.run(["taskkill", "-f", "-im", self.exe_name])
-        except:
-            pass
+        self.ldconsole("quit")
 
     def start_android(self):
-        emulator_index = (int(re.search(r'\d+', self.emulator_name).group()) - 5554) / 2
         try:
             console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
-            os.popen(console_dir + " launch --index " + str(emulator_index))
+            os.popen(console_dir + " launch --index " + str(self.emulator_index))
             start_time = time.time()
             while not self.is_android_online():
                 time.sleep(1)
