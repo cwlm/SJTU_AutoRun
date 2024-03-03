@@ -4,7 +4,7 @@ import time
 from sjtuautorun.constants.data_roots import *
 
 from .emulator import Emulator
-from ..constants.custom_exceptions import CriticalErr, NetworkErr
+from ..constants.custom_exceptions import CriticalErr, NetworkErr, ImageNotFoundErr
 from sjtuautorun.constants.image_templates import IMG
 
 
@@ -46,14 +46,14 @@ class Timer(Emulator):
 
         pos = self.wait_image(IMG.start_image[1])
         if not pos:
-            raise CriticalErr("Cannot find the searching bar")
+            raise ImageNotFoundErr("Cannot find the searching bar")
 
         self.Android.click(pos[0], pos[1])
         self.text('去跑步')
 
         pos = self.wait_image(IMG.start_image[3])
         if pos is None:
-            raise CriticalErr("Cannot find the go running icon")
+            raise ImageNotFoundErr("Cannot find the go running icon")
         self.Android.click(pos[0], pos[1])
         self.logger.info("Start successfully!")
 
@@ -87,6 +87,29 @@ class Timer(Emulator):
         self.change_location(121.431588, 31.026867)
         time.sleep(10)
 
+    def confirm(self, must_confirm=0, delay=0.5, confidence=0.9, timeout=0):
+        """等待并点击弹出在屏幕中央的各种确认按钮
+
+        Args:
+            must_confirm (int, optional): 是否必须按. Defaults to 0.
+            delay (float, optional): 点击后延时(秒). Defaults to 0.5.
+            timeout (int, optional): 等待延时(秒),负数或 0 不等待. Defaults to 0.
+
+        Raises:
+            ImageNotFoundErr: 如果 must_confirm = True 但是 timeout 之内没找到确认按钮排除该异常
+        Returns:
+            bool:True 为成功,False 为失败
+        """
+        ret = self.wait_images(IMG.confirm_image[1:], confidence=confidence, timeout=timeout)
+        if ret is None:
+            if must_confirm == 1:
+                raise ImageNotFoundErr("no confirm image found")
+            else:
+                return False
+        pos = self.get_image_position(IMG.confirm_image[ret + 1], confidence=confidence, need_screen_shot=0)
+        self.Android.click(pos[0], pos[1], delay=delay)
+        return True
+
     def set_text_size(self):
         # 点击设置
         pos = self.wait_image(IMG.setting_image[1])
@@ -113,8 +136,5 @@ class Timer(Emulator):
         self.Android.click(pos[0], pos[1])
 
         # 点击确定
-        pos = self.wait_image(IMG.setting_image[5])
-        if not pos:
-            raise CriticalErr("Set text size failed!")
-        self.Android.click(pos[0], pos[1])
+        self.confirm(must_confirm=1, timeout=10)
         return True
