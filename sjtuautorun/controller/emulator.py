@@ -111,15 +111,8 @@ class Emulator:
         """
         self.Android.swipe(x0, y0, x1, y1, duration=duration, delay=0.1)
 
-    def ldconsole(self, command, command_arg):
-        emulator_name = self.Windows.emulator_name
-        emulator_index = (int(re.search(r'\d+', emulator_name).group()) - 5554) / 2
-        emulator_dir = self.Windows.emulator_dir  # 模拟器路径
-        console_dir = os.path.join(os.path.dirname(emulator_dir), "ldconsole.exe")
-        os.popen(console_dir + " " + command + " --index " + str(emulator_index) + " " + command_arg)
-
     def change_location(self, longitude, latitude):
-        self.ldconsole("action", "--key call.locate --value " + str(longitude) + "," + str(latitude))
+        self.Windows.ldconsole("action", "--key call.locate --value " + str(longitude) + "," + str(latitude))
 
     # ===========图像函数============
 

@@ -21,6 +21,7 @@ class WindowsController:
         self.emulator_name = config["emulator_name"]
         self.emulator_dir = config["emulator_dir"]  # 模拟器路径
         self.exe_name = os.path.basename(self.emulator_dir)  # 自动获得模拟器的进程名
+        self.emulator_index = (int(re.search(r'\d+', self.emulator_name).group()) - 5554) / 2
 
     # ======================== 网络 ========================
     def check_network(self):
@@ -42,6 +43,9 @@ class WindowsController:
         return False
 
     # ======================== 模拟器 ========================
+    def ldconsole(self, command, command_arg=None):
+        console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
+        os.popen(console_dir + " " + command + " --index " + str(self.emulator_index) + " " + command_arg)
 
     # @try_for_times()
     def connect_android(self) -> airtest.core.android.android.Android:
