@@ -22,6 +22,7 @@ easyocr = "^1.7.1"
 keyboard = "^0.13.5"
 paddleocr = "^2.0.1"
 paddlepaddle = "^2.6.0"
+geopy = "^2.4.1"
 
 [tool.poetry-version-plugin]
 source = "init"

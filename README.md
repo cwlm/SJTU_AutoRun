@@ -55,7 +55,7 @@ emulator:
 LOG_PATH: "log"
 DELAY: 1.5
 PLAN_ROOT: "C:/path/to/your/plans" # 计划根目录, 如果缺省则默认为 [python packages 目录]/sjtuautorun/data/plans
-plan: "宣怀大道" # 执行发计划为"宣怀大道.yaml"
+plan: "宣怀大道" # 执行计划为"宣怀大道.yaml"
 ```
 
 #### 编写跑步计划
@@ -96,9 +96,12 @@ timer = start_script("C:/path/to/settings/settings.yaml")
 [默认的用户配置文件](https://github.com/cwlm/SJTU_AutoRun/blob/documentation/sjtuautorun/data/default_settings.yaml)
 运行, 默认文件位于本仓库 `/sjtuautorun/data/default_settings.yaml`.
 
+接下来，`run_plan = RunPlan(timer)`实例了一个跑步计划来接管控制器，`run_plan.start_run()`启动了跑步.
+目前上不支持自动结束跑步，请在脚本运行结束后手动退出.
+
 ## 近期更新
 
-- 修复瞬移bug，实现速度设置
+- 修复瞬移bug，实现速度设置 *2024/03/04*
 - 实现自动修改交我办字体大小，自动确认权限 *2024/03/04*
 - 实现图像识别自启动 *2024/03/02*
 - 重构跑步逻辑，实现不同跑步计划 *2024/03/02*
