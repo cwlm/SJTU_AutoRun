@@ -44,7 +44,7 @@ class RunPlan:
         # 启动跑步
         pos = self.timer.wait_image(IMG.run_image[1])
         if pos is None:
-            raise ImageNotFoundErr("Cannot find start buttion")
+            raise ImageNotFoundErr("Cannot find start button")
         self.timer.Android.click(pos[0], pos[1])
 
         if self.timer.wait_image(IMG.run_image[2]) is not None:
@@ -56,17 +56,21 @@ class RunPlan:
         time.sleep(5)
 
         for i in range(len(self.plan_args["points"]) - 1):
-            start_longitude = self.plan_args["points"][i - 1][0]
-            end_longitude = self.plan_args["points"][i][0]
-            start_latitude = self.plan_args["points"][i - 1][1]
-            end_latitude = self.plan_args["points"][i][1]
+
+            start_longitude = self.plan_args["points"][i][0]
+            end_longitude = self.plan_args["points"][i + 1][0]
+            start_latitude = self.plan_args["points"][i][1]
+            end_latitude = self.plan_args["points"][i + 1][1]
 
             total_distance = calculate_geo_distance(start_latitude, start_longitude, end_latitude, end_longitude)
+            interval = 0.5
             running_pace = random.uniform(3.5, 4)
-            step_distance = 5 / (3 * running_pace)
+            step_distance = 1000 * interval / (60 * running_pace)
             num_steps = round(total_distance / step_distance)
 
             for j in range(1, num_steps):
+                start_time = time.time()
+
                 # 计算经纬度的插值
                 current_longitude = np.interp(j, [1, num_steps - 1], [start_longitude, end_longitude])
                 current_latitude = np.interp(j, [1, num_steps - 1], [start_latitude, end_latitude])
@@ -75,5 +79,6 @@ class RunPlan:
                 self.timer.change_location(current_longitude, current_latitude)
                 self.timer.logger.debug(current_longitude, current_latitude)
 
-                # 等待0.5秒
-                time.sleep(0.1)
+                # 等待
+                elapsed_time = time.time() - start_time
+                time.sleep(max(0.0, interval - elapsed_time))
