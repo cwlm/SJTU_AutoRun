@@ -1,9 +1,10 @@
 emulator:
   emulator_dir: ""
-  emulator_name: emulator-5554 # 雷电模拟器使用多开器请填写该项, 不多开默认为 "emulator-5554"
+  emulator_name: emulator-5556 # 雷电模拟器使用多开器请填写该项, 不多开默认为 "emulator-5554"
 
 DELAY: 1.5
-PLAN_ROOT: # 计划根目录, 如果缺省则默认为 [python packages 目录]/sjtuautorun/data/plans
+PLAN_ROOT:
+plan: "宣怀大道"
 
 # ========== Logger设置 ==========
 LOG_PATH: "log"

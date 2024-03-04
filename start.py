@@ -1,5 +1,3 @@
-import os
-
 from sjtuautorun.mygo import RunPlan
 from sjtuautorun.scripts.main import start_script
 

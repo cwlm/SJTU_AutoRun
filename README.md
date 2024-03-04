@@ -43,6 +43,8 @@ print(sjtuautorun.__version__)
 
 修改配置文件的内容, 默认文件在`sjtuautorun/data/default_settings.yaml`，也可以单独写一个配置文件，并在`start_script()`的时候指定.
 
+使用自己的计划时，请在
+
 配置文件模板如下:
 
 ```yaml
@@ -52,6 +54,21 @@ emulator:
 
 LOG_PATH: "log"
 DELAY: 1.5
+PLAN_ROOT: "C:/path/to/your/plans" # 计划根目录, 如果缺省则默认为 [python packages 目录]/sjtuautorun/data/plans
+plan: "宣怀大道" # 执行发计划为"宣怀大道.yaml"
+```
+
+#### 编写跑步计划
+
+本项目支持用户自定义跑步计划，本项目也提供一些预设的跑步计划，放在`sjtuautorun/data/plans`目录下.
+
+跑步计划文件模板如下:
+
+```yaml
+speed: [3.5, 4] # 配速区间（min/km）
+points: # 途径点，第一个是起点，最后一个是终点
+  - [121.431588, 31.026867] #[经度, 纬度]
+  - [121.443628, 31.030699]
 ```
 
 #### 开始使用
@@ -75,6 +92,8 @@ timer = start_script("C:/path/to/settings/settings.yaml")
 运行, 默认文件位于本仓库 `/sjtuautorun/data/default_settings.yaml`.
 
 ## 近期更新
+
+- 修复瞬移bug，实现速度设置
 - 实现自动修改交我办字体大小，自动确认权限 *2024/03/04*
 - 实现图像识别自启动 *2024/03/02*
 - 重构跑步逻辑，实现不同跑步计划 *2024/03/02*
@@ -82,10 +101,10 @@ timer = start_script("C:/path/to/settings/settings.yaml")
 
 ## 未来开发任务
 
-- 随机化跑步数据
-- 不同跑步策略（如光体、南体跑圈等）
-
-
-- 调整图像识别模块，实现自动结束
-- 适配不同交我办语言
+- [ ] 撰写不同跑步策略（如光体、南体跑圈等）
+- [ ] 实现自动结束
+- [ ] 适配不同交我办语言
+- [ ] 随机化跑步数据
+- [x] 调整图像识别模块，实现自动启动
+- [x] 兼容不同跑步策略
 

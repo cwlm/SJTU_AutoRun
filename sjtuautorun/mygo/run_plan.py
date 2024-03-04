@@ -12,16 +12,16 @@ from sjtuautorun.constants.image_templates import IMG
 
 
 class RunPlan:
-    def __init__(self, timer: Timer, user_plan_path=None):
+    def __init__(self, timer: Timer):
         self.timer = timer
         self.config = timer.config
 
         plan_args = yaml_to_dict(os.path.join(self.config.PLAN_ROOT, "default.yaml"))
-        if user_plan_path is None:
+        if self.config.plan is None:
             self.timer.logger.warning(f"No run plan specified, default plan "
-                                      f"{os.path.join(DATA_ROOT, 'plans', 'default.yaml')} will be used")
+                                      f"{os.path.join(self.config.PLAN_ROOT, 'default.yaml')} will be used")
         else:
-            user_plan = yaml_to_dict(user_plan_path)
+            user_plan = yaml_to_dict(os.path.join(self.config.PLAN_ROOT, self.config.plan + ".yaml"))
             plan_args = recursive_dict_update(plan_args, user_plan)
 
         self.plan_args = plan_args
@@ -64,7 +64,7 @@ class RunPlan:
 
             total_distance = calculate_geo_distance(start_latitude, start_longitude, end_latitude, end_longitude)
             interval = 0.5
-            running_pace = random.uniform(3.5, 4)
+            running_pace = random.uniform(self.plan_args["speed"][0], self.plan_args["speed"][1])
             step_distance = 1000 * interval / (60 * running_pace)
             num_steps = round(total_distance / step_distance)
 
