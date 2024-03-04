@@ -10,13 +10,21 @@
 
 #### 前期准备
 
-安装 [雷电模拟器](https://www.ldmnq.com/), [交我办](https://net.sjtu.edu.cn/wlfw/jwbApp.htm).
+安装 [雷电模拟器](https://www.ldmnq.com/), 并在其中安装 [交我办](https://net.sjtu.edu.cn/wlfw/jwbApp.htm).
 
 雷电模拟器请安装雷电模拟器9
 
 [安装 Python](https://zhuanlan.zhihu.com/p/111168324) 注意, Python 版本要求 3.9 <= x <= 3.11, 我们推荐你安装 [Python3.9.13](https://www.python.org/downloads/release/python-3913/).
 
 将模拟器设置为 `1080x1920` 分辨率, 并设置为`手机版`.
+
+在安装完交我办后，你需要完成第一次登录后，再使用本脚本.
+
+#### 创建虚拟环境（可选）
+
+鉴于 Python 的依赖会随着电脑上项目的增加而变得复杂而难以维护，我们推荐你使用venv，conda等工具来为每个项目创建不同的虚拟环境.
+
+venv 在 Python3.6 及以上的版本中都默认安装，在这里仅附上 [venv](https://zhuanlan.zhihu.com/p/341481537) 的使用方式.
 
 #### 安装本项目(sjtuautorun)
 
