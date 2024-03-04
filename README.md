@@ -57,7 +57,7 @@ print(sjtuautorun.__version__)
 
 ```yaml
 emulator:
-  emulator_dir: "" #留空时会使用注册表定位雷电模拟器，并自动填写
+  emulator_dir: "" #留空时会使用注册表定位雷电模拟器
   emulator_name: emulator-5554 # 雷电模拟器使用多开器请填写该项, 不多开默认为 "emulator-5554"
 
 LOG_PATH: "log"
