@@ -17,8 +17,9 @@ def initialize_logger_and_config(settings_path):
     if settings_path is not None:
         user_settings = yaml_to_dict(settings_path)
         if user_settings["emulator"]["emulator_dir"] == "":
+            print("No emulator directory provided, reading the registry")
             user_settings["emulator"]["emulator_dir"] = get_emulator_path()
-        dict_to_yaml(user_settings, settings_path)
+            print("The emulator directory is " + user_settings["emulator"]["emulator_dir"])
         config = recursive_dict_update(config, user_settings)
     else:
         print("========Warning========")
