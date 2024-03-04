@@ -1,7 +1,11 @@
-import numpy as np
+import os
 import time
 
+from sjtuautorun.constants.data_roots import *
+
 from .emulator import Emulator
+from ..constants.custom_exceptions import CriticalErr, NetworkErr, ImageNotFoundErr
+from sjtuautorun.constants.image_templates import IMG
 
 
 class Timer(Emulator):
@@ -10,32 +14,127 @@ class Timer(Emulator):
     def __init__(self, config, logger):
         super().__init__(config, logger)
 
-        self.app_name = "edu.sjtu.infoplus.taskcenter"
+        if not self.config.PLAN_ROOT:
+            self.logger.warning(
+                f"No PLAN_ROOT specified, default value {os.path.join(DATA_ROOT, 'plans')} will be used")
+            self.config.PLAN_ROOT = os.path.join(DATA_ROOT, "plans")
 
-        # ========== 启动交我办 ==========
+        self.app_name = "edu.sjtu.infoplus.taskcenter"
+        self.start()
+
+    def start(self):
         if not self.Android.is_app_running():
             self.Android.start_app(self.app_name)
+        else:
+            self.restart()
+            return
 
-        # ========== 检查页面状态、进入跑步 ============
-        # 还没做
+        ret = self.wait_images(IMG.start_image[1:3])
+        # 打开应用后可能会出现的状态:
+        # None: 打开失败或者字体不正确
+        # 0: 预期结果
+        # 1: 出现交我办更新，这里选择直接叉掉更新页
+        if ret is None:
+            self.set_text_size()
+            self.restart()
+            return
+        elif ret == 0:
+            pass
+        elif ret == 1:
+            pos = self.wait_image(IMG.start_image[2])
+            self.click(pos[0], pos[1])
+
+        pos = self.wait_image(IMG.start_image[1])
+        if not pos:
+            raise ImageNotFoundErr("Cannot find the searching bar")
+
+        self.Android.click(pos[0], pos[1])
+        self.text('去跑步')
+
+        pos = self.wait_image(IMG.start_image[3])
+        if pos is None:
+            raise ImageNotFoundErr("Cannot find the go running icon")
+        self.Android.click(pos[0], pos[1])
+        self.logger.info("Start successfully!")
+
+    def restart(self, times=0):
+        try:
+            self.Android.ShellCmd(f"am force-stop {self.app_name}")
+            self.Android.ShellCmd("input keyevent 3")
+            self.start()
+        except:
+            if not self.Windows.is_android_online():
+                pass
+
+            elif times == 1:
+                raise CriticalErr("on restart,")
+
+            elif not self.Windows.check_network():
+                for i in range(11):
+                    time.sleep(10)
+                    if self.Windows.check_network():
+                        break
+                    if i == 10:
+                        raise NetworkErr()
+
+            elif self.Android.is_app_running():
+                raise CriticalErr("CriticalErr on restart function")
+
+            self.Windows.connect_android()
+            self.restart(times + 1)
+
+    def run(self):
         self.change_location(121.431588, 31.026867)
-        time.sleep(20)
+        time.sleep(10)
 
-        # ========== 开始跑步 ============
-        start_longitude = 121.431588
-        end_longitude = 121.443628
-        start_latitude = 31.026867
-        end_latitude = 31.030699
+    def confirm(self, must_confirm=0, delay=0.5, confidence=0.9, timeout=0):
+        """等待并点击弹出在屏幕中央的各种确认按钮
 
-        num_steps = 2501
+        Args:
+            must_confirm (int, optional): 是否必须按. Defaults to 0.
+            delay (float, optional): 点击后延时(秒). Defaults to 0.5.
+            timeout (int, optional): 等待延时(秒),负数或 0 不等待. Defaults to 0.
 
-        for i in range(1, num_steps):
-            # 计算经纬度的插值
-            current_longitude = np.interp(i, [1, num_steps - 1], [start_longitude, end_longitude])
-            current_latitude = np.interp(i, [1, num_steps - 1], [start_latitude, end_latitude])
+        Raises:
+            ImageNotFoundErr: 如果 must_confirm = True 但是 timeout 之内没找到确认按钮排除该异常
+        Returns:
+            bool:True 为成功,False 为失败
+        """
+        ret = self.wait_images(IMG.confirm_image[1:], confidence=confidence, timeout=timeout)
+        if ret is None:
+            if must_confirm == 1:
+                raise ImageNotFoundErr("no confirm image found")
+            else:
+                return False
+        pos = self.get_image_position(IMG.confirm_image[ret + 1], confidence=confidence, need_screen_shot=0)
+        self.Android.click(pos[0], pos[1], delay=delay)
+        return True
 
-            # 调用位置变更函数
-            self.change_location(current_longitude, current_latitude)
+    def set_text_size(self):
+        # 点击设置
+        pos = self.wait_image(IMG.setting_image[1])
+        if not pos:
+            return False
+        self.Android.click(pos[0], pos[1])
 
-            # 等待0.5秒
-            time.sleep(0.1)
+        # 点击调节字体
+        pos = self.wait_image(IMG.setting_image[2])
+        if not pos:
+            raise CriticalErr("Set text size failed!")
+        self.Android.click(pos[0], pos[1])
+
+        # 点击小号字体
+        pos = self.wait_image(IMG.setting_image[3])
+        if not pos:
+            raise CriticalErr("Set text size failed!")
+        self.Android.click(pos[0], pos[1])
+
+        # 点击返回
+        pos = self.wait_image(IMG.setting_image[4])
+        if not pos:
+            raise CriticalErr("Set text size failed!")
+        self.Android.click(pos[0], pos[1])
+
+        # 点击确定
+        self.confirm(must_confirm=1, timeout=10)
+        return True

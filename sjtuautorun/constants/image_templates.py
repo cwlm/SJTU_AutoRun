@@ -23,7 +23,11 @@ class MyTemplate(Template):
 
     def _cv_match(self, screen, this_methods=None):
         ori_image = self._imread()
+        # img = Image.fromarray(ori_image)
+        # img.show()
         image = self._resize_image(ori_image, screen, ST.RESIZE_METHOD)
+        # img = Image.fromarray(image)
+        # img.show()
         ret = None
         if this_methods is None:
             this_methods = ST.CVSTRATEGY
@@ -72,15 +76,15 @@ def make_dir_templates(path):
                     * (key - len(res) + 1)
                 )
             file_path = os.path.join(path, file)
-            res[key] = MyTemplate(file_path, 0.9, resolution=(540, 960))
+            res[key] = MyTemplate(file_path, 0.9, resolution=(1080, 1920))
     else:
         res = {}
         for file in all_files:
             file_path = os.path.join(path, file)
             key_name = file.split(".")[0]
             if key_name.isdecimal():
-                res[int(key_name)] = MyTemplate(file_path, 0.9, resolution=(540, 960))
-            res[key_name] = MyTemplate(file_path, 0.9, resolution=(540, 960))
+                res[int(key_name)] = MyTemplate(file_path, 0.9, resolution=(1080, 1920))
+            res[key_name] = MyTemplate(file_path, 0.9, resolution=(1080, 1920))
 
     return res
 
@@ -106,7 +110,7 @@ def make_dir_templates_without_number(path):
 class ImageSet:
     def __init__(self):
         # identify_images 多图识别，单独处理
-        self.identify_images = make_dir_templates_without_number(f"{IMG_ROOT}/identify_images")
+        # self.identify_images = make_dir_templates_without_number(f"{IMG_ROOT}/identify_images")
 
         for sub_folder in os.listdir(IMG_ROOT):
             if sub_folder not in self.__dict__:

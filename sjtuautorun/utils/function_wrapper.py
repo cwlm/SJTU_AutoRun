@@ -1,6 +1,6 @@
 from functools import wraps
 
-from sjtuautorun.constants import script_end
+from sjtuautorun.constants.global_attribute import script_end
 
 
 def try_for_times(error_processor=None):

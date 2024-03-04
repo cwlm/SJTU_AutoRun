@@ -1,0 +1,13 @@
+emulator:
+  emulator_dir: ""
+  emulator_name: emulator-5556 # 雷电模拟器使用多开器请填写该项, 不多开默认为 "emulator-5554"
+
+DELAY: 1.5
+PLAN_ROOT:
+plan: "宣怀大道"
+
+# ========== Logger设置 ==========
+LOG_PATH: "log"
+DEBUG: True
+SHOW_ANDROID_INPUT: True
+log_level: DEBUG # 调试模式 log_level 应该设置为 DEBUG

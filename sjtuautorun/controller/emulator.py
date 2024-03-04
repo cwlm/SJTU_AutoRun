@@ -10,7 +10,7 @@ import cv2
 from sjtuautorun.constants.custom_exceptions import ImageNotFoundErr
 from sjtuautorun.constants.image_templates import make_dir_templates
 from sjtuautorun.utils.api_image import MyTemplate, convert_position, locateCenterOnImage
-from sjtuautorun.utils.math_functions import CalcDis
+from sjtuautorun.utils.math_functions import calculate_distance
 from sjtuautorun.utils.new_logger import Logger
 
 from .android_controller import AndroidController
@@ -111,15 +111,8 @@ class Emulator:
         """
         self.Android.swipe(x0, y0, x1, y1, duration=duration, delay=0.1)
 
-    def ldconsole(self, command, command_arg):
-        emulator_name = self.Windows.emulator_name
-        emulator_index = (int(re.search(r'\d+', emulator_name).group()) - 5554) / 2
-        emulator_dir = self.Windows.emulator_dir  # 模拟器路径
-        console_dir = os.path.join(os.path.dirname(emulator_dir), "ldconsole.exe")
-        os.popen(console_dir + " " + command + " --index " + str(emulator_index) + " " + command_arg)
-
     def change_location(self, longitude, latitude):
-        self.ldconsole("action", "--key call.locate --value " + str(longitude) + "," + str(latitude))
+        self.Windows.ldconsole("action", "--key call.locate --value " + str(longitude) + "," + str(latitude))
 
     # ===========图像函数============
 
@@ -159,7 +152,7 @@ class Emulator:
         """
         color = self.get_pixel(*position, screen_shot)
         color.reverse()
-        return CalcDis(color, bgr_color) < distance ** 2
+        return calculate_distance(color, bgr_color) < distance ** 2
 
     def locateCenterOnScreen(self, query: MyTemplate, confidence=0.85, this_methods=None):
         """从屏幕中找出和模板图像匹配度最高的矩阵区域的中心坐标
@@ -264,16 +257,14 @@ class Emulator:
             images (list, optional): 很多图片,可以是列表或字典. Defaults to [].
             confidence (_type_, optional): 置信度. Defaults to 0.85.
             timeout (int, optional): 最长等待时间. Defaults to 10.
-            gap
-            after_get_delay
 
         Raises:
             TypeError: image_list 中有不合法参数
 
         Returns:
-            None: 未找到任何图片
-            a number of int: 第一个出现的图片的下标(0-based) if images is a list
-            the key of the value: if images is a dict
+            if images is a list, return the index of the first image that appears
+            if images is a dict, return the key of the value
+            if not found, return None
         """
         if timeout < 0:
             raise ValueError("arg 'timeout' should at least be 0 but is ", str(timeout))
@@ -288,14 +279,15 @@ class Emulator:
             images = images.items()
 
         start_time = time.time()
-        while time.time() - start_time <= timeout:
+        while True:
             self.update_screen()
             for res, image in images:
                 if self.image_exist(image, False, confidence):
                     time.sleep(after_get_delay)
                     return res
             time.sleep(gap)
-        return None
+            if time.time() - start_time > timeout:
+                return None
 
     def wait_images_position(self, images=None, confidence=0.85, gap=0.15, after_get_delay=0, timeout=10):
         """等待一些图片,并返回第一个匹配结果的位置

@@ -21,6 +21,7 @@ class WindowsController:
         self.emulator_name = config["emulator_name"]
         self.emulator_dir = config["emulator_dir"]  # 模拟器路径
         self.exe_name = os.path.basename(self.emulator_dir)  # 自动获得模拟器的进程名
+        self.emulator_index = (int(re.search(r'\d+', self.emulator_name).group()) - 5554) / 2
 
     # ======================== 网络 ========================
     def check_network(self):
@@ -29,7 +30,7 @@ class WindowsController:
         Returns:
             bool:网络正常返回 True,否则返回 False
         """
-        return os.system("ping www.moefantasy.com") == 0
+        return os.system("ping www.sjtu.edu.cn") == 0
 
     def wait_network(self, timeout=1000):
         """等待到网络恢复"""
@@ -42,6 +43,28 @@ class WindowsController:
         return False
 
     # ======================== 模拟器 ========================
+    def ldconsole(self, command, command_arg="", global_command=False):
+        """
+        使用雷电命令行控制模拟器。
+
+        :param command: 要执行的ldconsole命令。
+        :type command: str
+
+        :param command_arg: 命令的附加参数（可选）。
+        :type command_arg: str, 可选
+
+        :param global_command: 指示命令是否是全局的（不特定于模拟器实例）。
+        :type global_command: bool, 可选
+
+        :return: 雷电命令行执行的输出。
+        :rtype: str
+        """
+        console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
+        if not global_command:
+            ret = os.popen(console_dir + " " + command + " --index " + str(self.emulator_index) + " " + command_arg)
+        else:
+            ret = os.popen(console_dir + " " + command_arg)
+        return ret.read()
 
     # @try_for_times()
     def connect_android(self) -> airtest.core.android.android.Android:
@@ -76,21 +99,16 @@ class WindowsController:
         Returns:
             bool: 在线返回 True, 否则返回 False
         """
-        raw_res = check_output(f'tasklist /fi "ImageName eq {self.exe_name}').decode(
-            "gbk")
-        return "PID" in raw_res
+        raw_res = self.ldconsole("isrunning")
+        self.logger.info(raw_res)
+        return raw_res == 'running'
 
     def kill_android(self):
-        try:
-            subprocess.run(["taskkill", "-f", "-im", self.exe_name])
-        except:
-            pass
+        self.ldconsole("quit")
 
     def start_android(self):
-        emulator_index = (int(re.search(r'\d+', self.emulator_name).group()) - 5554) / 2
         try:
-            console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
-            os.popen(console_dir + " launch --index " + str(emulator_index))
+            self.ldconsole("launch")
             start_time = time.time()
             while not self.is_android_online():
                 time.sleep(1)
