@@ -75,6 +75,7 @@ timer = start_script("C:/path/to/settings/settings.yaml")
 运行, 默认文件位于本仓库 `/sjtuautorun/data/default_settings.yaml`.
 
 ## 近期更新
+- 实现自动修改交我办字体大小，自动确认权限 *2024/03/04*
 - 实现图像识别自启动 *2024/03/02*
 - 重构跑步逻辑，实现不同跑步计划 *2024/03/02*
 - 完成脚本基本逻辑，实现单个短程自动跑步 *2024/02/26*
@@ -86,5 +87,5 @@ timer = start_script("C:/path/to/settings/settings.yaml")
 
 
 - 调整图像识别模块，实现自动结束
-- 适配不同交我办语言和字体大小
+- 适配不同交我办语言
 

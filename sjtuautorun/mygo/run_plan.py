@@ -3,6 +3,7 @@ import random
 import time
 import numpy as np
 
+from sjtuautorun.constants.custom_exceptions import CriticalErr, ImageNotFoundErr
 from sjtuautorun.constants.data_roots import DATA_ROOT
 from sjtuautorun.controller.run_timer import Timer
 from sjtuautorun.utils.io import yaml_to_dict, recursive_dict_update
@@ -27,19 +28,33 @@ class RunPlan:
         assert len(plan_args["points"]) >= 2, "请输入两个以上途径点"
 
     def start_run(self):
-
-        time.sleep(5)
         # 初始化位置
         self.timer.change_location(self.plan_args["points"][0][0], self.plan_args["points"][0][1])
 
+        # 确认权限
+        ret = self.timer.wait_images([IMG.run_image[1]] + [IMG.confirm_image[2:]])
+        if ret is None:
+            raise CriticalErr("Cannot start running")
+        elif ret == 0:
+            pass
+        else:
+            while self.timer.confirm(timeout=0.5):
+                pass
+
+        # 启动跑步
         pos = self.timer.wait_image(IMG.run_image[1])
+        if pos is None:
+            raise ImageNotFoundErr("Cannot find start button")
         self.timer.Android.click(pos[0], pos[1])
 
         if self.timer.wait_image(IMG.run_image[2]) is not None:
             self.run()
+        else:
+            raise CriticalErr("Cannot start running")
 
     def run(self):
-        time.sleep(3)
+        time.sleep(5)
+
         for i in range(len(self.plan_args["points"]) - 1):
 
             start_longitude = self.plan_args["points"][i][0]
@@ -64,6 +79,6 @@ class RunPlan:
                 self.timer.change_location(current_longitude, current_latitude)
                 self.timer.logger.debug(current_longitude, current_latitude)
 
-                # 等待0.1秒
+                # 等待
                 elapsed_time = time.time() - start_time
                 time.sleep(max(0.0, interval - elapsed_time))
