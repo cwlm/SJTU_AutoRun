@@ -76,8 +76,13 @@ points: # 途径点，第一个是起点，最后一个是终点
 这一份简单的启动代码:
 
 ```python
+from sjtuautorun.mygo import RunPlan
 from sjtuautorun.scripts.main import start_script
+
 timer = start_script()
+run_plan = RunPlan(timer)
+run_plan.start_run()
+
 ```
 
 这份代码启动了整个程序并获取了一个控制器 `timer`, `start_script()` 可以有参数, 代表用户设置的路径, 例如:
