@@ -53,32 +53,74 @@ class RunPlan:
             raise CriticalErr("Cannot start running")
 
     def run(self):
-        time.sleep(5)
+        time.sleep(self.config.DELAY)
 
-        for i in range(len(self.plan_args["points"]) - 1):
+        while True:
+            for i in range(len(self.plan_args["points"]) - 1):
+                start_longitude = self.plan_args["points"][i][0]
+                end_longitude = self.plan_args["points"][i + 1][0]
+                start_latitude = self.plan_args["points"][i][1]
+                end_latitude = self.plan_args["points"][i + 1][1]
 
-            start_longitude = self.plan_args["points"][i][0]
-            end_longitude = self.plan_args["points"][i + 1][0]
-            start_latitude = self.plan_args["points"][i][1]
-            end_latitude = self.plan_args["points"][i + 1][1]
+                self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
 
-            total_distance = calculate_geo_distance(start_latitude, start_longitude, end_latitude, end_longitude)
-            interval = 0.5
-            running_pace = random.uniform(self.plan_args["speed"][0], self.plan_args["speed"][1])
-            step_distance = 1000 * interval / (60 * running_pace)
-            num_steps = round(total_distance / step_distance)
+            if self.plan_args["mode"] == 'circular':
+                start_longitude = self.plan_args["points"][-1][0]
+                end_longitude = self.plan_args["points"][0][0]
+                start_latitude = self.plan_args["points"][-1][1]
+                end_latitude = self.plan_args["points"][0][1]
 
-            for j in range(1, num_steps):
-                start_time = time.time()
+                self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
 
-                # 计算经纬度的插值
-                current_longitude = np.interp(j, [1, num_steps - 1], [start_longitude, end_longitude])
-                current_latitude = np.interp(j, [1, num_steps - 1], [start_latitude, end_latitude])
+            elif self.plan_args["mode"] == 'back-and-forth':
+                for i in range(len(self.plan_args["points"]) - 1, 0, -1):
+                    start_longitude = self.plan_args["points"][i][0]
+                    end_longitude = self.plan_args["points"][i - 1][0]
+                    start_latitude = self.plan_args["points"][i][1]
+                    end_latitude = self.plan_args["points"][i - 1][1]
 
-                # 调用位置变更函数
+                    self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
+
+            elif self.plan_args["mode"] == 'single_trip':
+                break
+
+            else:
+                self.timer.logger.warning("Unknown \"mode\" config in run plan, defaulting to single_trip")
+                break
+
+    def AtoB(self, start_longitude, end_longitude, start_latitude, end_latitude):
+        self.timer.change_location(start_longitude, start_latitude)
+
+        total_distance = calculate_geo_distance(start_latitude, start_longitude, end_latitude, end_longitude)
+        interval = 0.25
+        running_pace = random.uniform(self.plan_args["speed"][0], self.plan_args["speed"][1])
+        step_distance = 1000 * interval / (60 * running_pace)
+        num_steps = round(total_distance / step_distance)
+
+        location_update_index = 0
+
+        for j in range(1, num_steps):
+            start_time = time.time()
+
+            rand1 = random.uniform(-0.000001 * self.plan_args["locating_error"],
+                                   0.000001 * self.plan_args["locating_error"])
+            rand2 = random.uniform(-0.000001 * self.plan_args["locating_error"],
+                                   0.000001 * self.plan_args["locating_error"])
+
+            # 计算经纬度的插值
+            current_longitude = np.interp(j, [1, num_steps - 1], [start_longitude, end_longitude]) + rand1
+            current_latitude = np.interp(j, [1, num_steps - 1], [start_latitude, end_latitude]) + rand2
+
+            # 调用位置变更函数
+            if location_update_index >= random.randint(0, 9) or j == num_steps - 1:
                 self.timer.change_location(current_longitude, current_latitude)
                 self.timer.logger.debug(current_longitude, current_latitude)
+                location_update_index = 0
+            else:
+                location_update_index += 1
 
-                # 等待
-                elapsed_time = time.time() - start_time
-                time.sleep(max(0.0, interval - elapsed_time))
+            # 等待
+            elapsed_time = time.time() - start_time
+            time.sleep(max(0.0, interval - elapsed_time))
+
+        self.timer.change_location(end_longitude, end_latitude)
