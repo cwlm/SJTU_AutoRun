@@ -32,7 +32,15 @@ class Emulator:
 
         # 初始化android控制器
         dev = self.Windows.connect_android()
-        self.Android = AndroidController(config, logger, dev)
+        self._init_android(dev)
+        self._add_extra_images()
+        if self.config.resolution != (1080, 1920):
+            self.Windows.restart_android()
+            dev = self.Windows.connect_android()
+            self._init_android(dev)
+
+    def _init_android(self, dev):
+        self.Android = AndroidController(self.config, self.logger, dev)
         self.update_screen()
         self.config.resolution = self.screen.shape[:2]
         self.config.resolution = self.config.resolution[::-1]  # 转换为 （宽x高）
