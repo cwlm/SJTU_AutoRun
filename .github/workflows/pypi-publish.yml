@@ -20,7 +20,7 @@ jobs:
   deploy:
     name: publish python package to PYPI
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
