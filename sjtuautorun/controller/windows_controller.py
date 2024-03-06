@@ -108,6 +108,7 @@ class WindowsController:
 
     def start_android(self):
         try:
+            self.ldconsole("modify", "--resolution 1080,1920,480")
             self.ldconsole("launch")
             start_time = time.time()
             while not self.is_android_online():
