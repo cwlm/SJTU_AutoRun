@@ -1,4 +1,4 @@
-speed: [3.5, 4] # 配速区间（min/km）
+speed: [3.2, 3.5] # 配速区间（min/km）
 mode: single_trip # 单程，目前支持：circular（循环，到达终点后前往起点）、back-and-forth（往返跑）
 locating_error: 10 # 定位随机化误差
 points: # 途径点，第一个是起点，最后一个是终点
