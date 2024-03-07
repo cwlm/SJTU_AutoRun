@@ -1,8 +1,8 @@
-# 交我润
+# 交我润 (SJTU_AutoRun)
 
 ## 项目简介
 
-基于雷电模拟器的交我办自动跑步脚本，脱胎于[AutoWSGR](https://github.com/huan-yp/Auto-WSGR)
+基于雷电模拟器的上海交通大学自动跑步脚本，脱胎于[AutoWSGR](https://github.com/huan-yp/Auto-WSGR)
 
 ## 使用方法
 
