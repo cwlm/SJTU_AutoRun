@@ -29,20 +29,18 @@ class Timer(Emulator):
             self.restart()
             return
 
-        ret = self.wait_images(IMG.start_image[1:3])
-        # 打开应用后可能会出现的状态:
-        # None: 打开失败或者字体不正确
-        # 0: 预期结果
-        # 1: 出现交我办更新，这里选择直接叉掉更新页
+        # 识别是否存在搜索框
+        ret = self.wait_image(IMG.start_image[1])
         if ret is None:
             self.set_text_size()
             self.restart()
             return
-        elif ret == 0:
-            pass
-        elif ret == 1:
-            pos = self.wait_image(IMG.start_image[2])
-            self.click(pos[0], pos[1])
+
+        pos = self.wait_image(IMG.start_image[2], timeout=0.5)
+
+        if pos:
+            self.logger.info("Close the update window")
+            self.Android.click(pos[0], pos[1])
 
         pos = self.wait_image(IMG.start_image[1])
         if not pos:
