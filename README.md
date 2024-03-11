@@ -2,6 +2,8 @@
 
 ## 项目简介
 
+![](https://img.shields.io/github/repo-size/cwlm/SJTU_AutoRun) ![](https://img.shields.io/pypi/v/sjtuautorun) ![](https://img.shields.io/pypi/dm/sjtuautorun) ![](https://img.shields.io/github/issues/cwlm/SJTU_AutoRun) ![MIT licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg)
+
 基于雷电模拟器的上海交通大学自动跑步脚本，脱胎于[AutoWSGR](https://github.com/huan-yp/Auto-WSGR)
 
 ## 使用方法
