@@ -110,6 +110,28 @@ class Timer(Emulator):
         self.Android.click(pos[0], pos[1], delay=delay)
         return True
 
+    def end(self):
+        # 暂停
+        pos = self.wait_image(IMG.run_image[2])
+        if not pos:
+            return False
+        self.Android.click(pos[0], pos[1])
+
+        # 结束跑步
+        pos = self.wait_image(IMG.run_image[4])
+        if not pos:
+            return False
+        self.Android.long_tap(pos[0], pos[1], duration=5, delay=0.5)
+
+        # 一系列确认
+        while self.confirm():
+            pass
+
+        # 关闭模拟器
+        pos = self.wait_image(IMG.start_image[3])
+        if pos:
+            self.Windows.kill_android()
+
     def set_text_size(self):
         # 点击设置
         pos = self.wait_image(IMG.setting_image[1])
