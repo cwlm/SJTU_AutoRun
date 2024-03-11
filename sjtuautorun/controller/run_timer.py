@@ -4,6 +4,7 @@ import time
 from sjtuautorun.constants.data_roots import *
 
 from .emulator import Emulator
+from .windows_controller import check_network
 from ..constants.custom_exceptions import CriticalErr, NetworkErr, ImageNotFoundErr
 from sjtuautorun.constants.image_templates import IMG
 
@@ -69,10 +70,10 @@ class Timer(Emulator):
             elif times == 1:
                 raise CriticalErr("on restart,")
 
-            elif not self.Windows.check_network():
+            elif not check_network():
                 for i in range(11):
                     time.sleep(10)
-                    if self.Windows.check_network():
+                    if check_network():
                         break
                     if i == 10:
                         raise NetworkErr()

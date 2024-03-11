@@ -13,6 +13,15 @@ from sjtuautorun.constants.custom_exceptions import CriticalErr
 # Win 向系统写入数据
 
 
+def check_network():
+    """检查网络状况
+
+    Returns:
+        bool:网络正常返回 True,否则返回 False
+    """
+    return os.system("ping www.sjtu.edu.cn") == 0
+
+
 class WindowsController:
     def __init__(self, config, logger) -> None:
         self.logger = logger
@@ -23,19 +32,12 @@ class WindowsController:
         self.emulator_index = (int(re.search(r'\d+', self.emulator_name).group()) - 5554) / 2
 
     # ======================== 网络 ========================
-    def check_network(self):
-        """检查网络状况
-
-        Returns:
-            bool:网络正常返回 True,否则返回 False
-        """
-        return os.system("ping www.sjtu.edu.cn") == 0
 
     def wait_network(self, timeout=1000):
         """等待到网络恢复"""
         start_time = time.time()
         while time.time() - start_time <= timeout:
-            if self.check_network():
+            if check_network():
                 return True
             time.sleep(10)
 
@@ -108,8 +110,8 @@ class WindowsController:
             bool: 在线返回 True, 否则返回 False
         """
         raw_res = self.ldconsole("isrunning")
-        self.logger.info(raw_res)
-        return raw_res == 'running'
+        self.logger.debug("Emulator status: " + raw_res)
+        return raw_res == "running"
 
     def kill_android(self):
         self.ldconsole("quit")

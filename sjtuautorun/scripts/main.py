@@ -86,15 +86,15 @@ def start_script_emulator(settings_path):
 
 def get_emulator_path():
     try:
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
-                             r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\leidian9")
+        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\leidian\ldplayer9")
         try:
-            path, _ = winreg.QueryValueEx(key, "DisplayIcon")
-            return path
+            path, _ = winreg.QueryValueEx(key, "InstallDir")
+            return os.path.join(path, "dnplayer.exe")
         except FileNotFoundError:
             print("Path not found")
         finally:
             winreg.CloseKey(key)
+
     except FileNotFoundError:
         print("Emulator not found")
         return None
