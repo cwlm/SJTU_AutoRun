@@ -2,7 +2,6 @@ import os
 import re
 import subprocess
 import time
-from subprocess import check_output
 
 import airtest.core.android.android
 from airtest.core.api import connect_device
@@ -12,6 +11,15 @@ from sjtuautorun.constants.custom_exceptions import CriticalErr
 
 # Win 和 Android 的通信
 # Win 向系统写入数据
+
+
+def check_network():
+    """检查网络状况
+
+    Returns:
+        bool:网络正常返回 True,否则返回 False
+    """
+    return os.system("ping www.sjtu.edu.cn") == 0
 
 
 class WindowsController:
@@ -24,19 +32,12 @@ class WindowsController:
         self.emulator_index = (int(re.search(r'\d+', self.emulator_name).group()) - 5554) / 2
 
     # ======================== 网络 ========================
-    def check_network(self):
-        """检查网络状况
-
-        Returns:
-            bool:网络正常返回 True,否则返回 False
-        """
-        return os.system("ping www.sjtu.edu.cn") == 0
 
     def wait_network(self, timeout=1000):
         """等待到网络恢复"""
         start_time = time.time()
         while time.time() - start_time <= timeout:
-            if self.check_network():
+            if check_network():
                 return True
             time.sleep(10)
 
@@ -60,11 +61,20 @@ class WindowsController:
         :rtype: str
         """
         console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
+
         if not global_command:
-            ret = os.popen(console_dir + " " + command + " --index " + str(self.emulator_index) + " " + command_arg)
+            cmd = [console_dir, command, "--index", str(self.emulator_index), command_arg]
         else:
-            ret = os.popen(console_dir + " " + command_arg)
-        return ret.read()
+            cmd = [console_dir, command_arg]
+
+        # 使用subprocess.Popen来执行命令
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        output, error = process.communicate()
+
+        # 获取命令执行的输出
+        result = output.decode("utf-8", errors="replace") if output else error.decode("utf-8", errors="replace")
+
+        return result
 
     # @try_for_times()
     def connect_android(self) -> airtest.core.android.android.Android:
@@ -100,8 +110,8 @@ class WindowsController:
             bool: 在线返回 True, 否则返回 False
         """
         raw_res = self.ldconsole("isrunning")
-        self.logger.info(raw_res)
-        return raw_res == 'running'
+        self.logger.debug("Emulator status: " + raw_res)
+        return raw_res == "running"
 
     def kill_android(self):
         self.ldconsole("quit")
