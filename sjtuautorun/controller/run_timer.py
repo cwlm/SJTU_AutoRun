@@ -125,7 +125,7 @@ class Timer(Emulator):
         self.Android.long_tap(pos[0], pos[1], duration=5, delay=0.5)
 
         # 一系列确认
-        while self.confirm():
+        while self.confirm(timeout=5):
             pass
 
         # 关闭模拟器
