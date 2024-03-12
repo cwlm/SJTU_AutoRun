@@ -4,7 +4,7 @@ emulator:
 
 DELAY: 1.5
 PLAN_ROOT:
-plan: "宣怀大道"
+plan: "default"
 
 # ========== Logger设置 ==========
 LOG_PATH: "log"
