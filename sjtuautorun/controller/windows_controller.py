@@ -59,22 +59,15 @@ class WindowsController:
 
         :return: 雷电命令行执行的输出。
         :rtype: str
+
+        TODO: 修复模拟器路径有空格的问题
         """
         console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
-
         if not global_command:
-            cmd = [console_dir, command, "--index", str(self.emulator_index), command_arg]
+            ret = os.popen(console_dir + " " + command + " --index " + str(self.emulator_index) + " " + command_arg)
         else:
-            cmd = [console_dir, command_arg]
-
-        # 使用subprocess.Popen来执行命令
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        output, error = process.communicate()
-
-        # 获取命令执行的输出
-        result = output.decode("utf-8", errors="replace") if output else error.decode("utf-8", errors="replace")
-
-        return result
+            ret = os.popen(console_dir + " " + command_arg)
+        return ret.read()
 
     # @try_for_times()
     def connect_android(self) -> airtest.core.android.android.Android:
