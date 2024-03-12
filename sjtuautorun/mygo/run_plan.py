@@ -53,7 +53,7 @@ class RunPlan:
             raise CriticalErr("Cannot start running")
 
         # 结束跑步
-        self.timer.end_run()
+        self.end_run()
 
     def run(self):
         time.sleep(self.config.DELAY)
@@ -105,6 +105,29 @@ class RunPlan:
             else:
                 self.timer.logger.warning("Unknown \"mode\" config in run plan, defaulting to single_trip")
                 break
+
+    def end_run(self):
+        # 暂停
+        pos = self.timer.wait_image(IMG.run_image[2])
+        if not pos:
+            return False
+        self.timer.Android.click(pos[0], pos[1])
+
+        # 结束跑步
+        pos = self.timer.wait_image(IMG.run_image[4])
+        if not pos:
+            return False
+        self.timer.Android.long_tap(pos[0], pos[1], duration=5, delay=0.5)
+
+        # 一系列确认
+        while self.timer.confirm(timeout=5):
+            pass
+
+        # 关闭模拟器
+        self.timer.logger.info("Run finished, closing the emulator!")
+        pos = self.timer.wait_image(IMG.start_image[3])
+        if pos:
+            self.timer.Windows.kill_android()
 
     def AtoB(self, start_longitude, end_longitude, start_latitude, end_latitude):
         self.timer.change_location(start_longitude, start_latitude)

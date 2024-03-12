@@ -82,10 +82,6 @@ class Timer(Emulator):
             self.Windows.connect_android()
             self.restart(times + 1)
 
-    def run(self):
-        self.change_location(121.431588, 31.026867)
-        time.sleep(10)
-
     def confirm(self, must_confirm=0, delay=0.5, confidence=0.9, timeout=0):
         """等待并点击弹出在屏幕中央的各种确认按钮
 
@@ -108,28 +104,6 @@ class Timer(Emulator):
         pos = self.get_image_position(IMG.confirm_image[ret + 1], confidence=confidence, need_screen_shot=0)
         self.Android.click(pos[0], pos[1], delay=delay)
         return True
-
-    def end_run(self):
-        # 暂停
-        pos = self.wait_image(IMG.run_image[2])
-        if not pos:
-            return False
-        self.Android.click(pos[0], pos[1])
-
-        # 结束跑步
-        pos = self.wait_image(IMG.run_image[4])
-        if not pos:
-            return False
-        self.Android.long_tap(pos[0], pos[1], duration=5, delay=0.5)
-
-        # 一系列确认
-        while self.confirm(timeout=5):
-            pass
-
-        # 关闭模拟器
-        pos = self.wait_image(IMG.start_image[3])
-        if pos:
-            self.Windows.kill_android()
 
     def set_text_size(self):
         # 点击设置
