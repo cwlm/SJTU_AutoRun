@@ -59,6 +59,8 @@ class WindowsController:
 
         :return: 雷电命令行执行的输出。
         :rtype: str
+
+        TODO: 修复模拟器路径有空格的问题
         """
         console_dir = os.path.join(os.path.dirname(self.emulator_dir), "ldconsole.exe")
         if not global_command:
