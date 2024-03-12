@@ -52,17 +52,26 @@ class RunPlan:
         else:
             raise CriticalErr("Cannot start running")
 
+        # 结束跑步
+        self.timer.end()
+
     def run(self):
         time.sleep(self.config.DELAY)
+        # 跑步的总路程
+        sum_distance = 0
 
         while True:
+            # 超过4km后，结束跑步
+            if sum_distance >= 4000:
+                break
+
             for i in range(len(self.plan_args["points"]) - 1):
                 start_longitude = self.plan_args["points"][i][0]
                 end_longitude = self.plan_args["points"][i + 1][0]
                 start_latitude = self.plan_args["points"][i][1]
                 end_latitude = self.plan_args["points"][i + 1][1]
 
-                self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
+                sum_distance += self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
 
             if self.plan_args["mode"] == 'circular':
                 start_longitude = self.plan_args["points"][-1][0]
@@ -70,7 +79,7 @@ class RunPlan:
                 start_latitude = self.plan_args["points"][-1][1]
                 end_latitude = self.plan_args["points"][0][1]
 
-                self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
+                sum_distance += self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
 
             elif self.plan_args["mode"] == 'back-and-forth':
                 for i in range(len(self.plan_args["points"]) - 1, 0, -1):
@@ -79,7 +88,7 @@ class RunPlan:
                     start_latitude = self.plan_args["points"][i][1]
                     end_latitude = self.plan_args["points"][i - 1][1]
 
-                    self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
+                    sum_distance += self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
 
             elif self.plan_args["mode"] == 'single_trip':
                 break
@@ -124,3 +133,4 @@ class RunPlan:
             time.sleep(max(0.0, interval - elapsed_time))
 
         self.timer.change_location(end_longitude, end_latitude)
+        return total_distance
