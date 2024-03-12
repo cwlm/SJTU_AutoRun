@@ -53,7 +53,7 @@ class RunPlan:
             raise CriticalErr("Cannot start running")
 
         # 结束跑步
-        self.timer.end()
+        self.timer.end_run()
 
     def run(self):
         time.sleep(self.config.DELAY)
@@ -62,7 +62,7 @@ class RunPlan:
 
         while True:
             # 超过4km后，结束跑步
-            if sum_distance >= 4000:
+            if sum_distance >= self.plan_args["distance"]:
                 break
 
             for i in range(len(self.plan_args["points"]) - 1):
@@ -72,6 +72,9 @@ class RunPlan:
                 end_latitude = self.plan_args["points"][i + 1][1]
 
                 sum_distance += self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
+                # 超过4km后，结束跑步
+                if sum_distance >= self.plan_args["distance"]:
+                    break
 
             if self.plan_args["mode"] == 'circular':
                 start_longitude = self.plan_args["points"][-1][0]
@@ -80,6 +83,9 @@ class RunPlan:
                 end_latitude = self.plan_args["points"][0][1]
 
                 sum_distance += self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
+                # 超过4km后，结束跑步
+                if sum_distance >= self.plan_args["distance"]:
+                    break
 
             elif self.plan_args["mode"] == 'back-and-forth':
                 for i in range(len(self.plan_args["points"]) - 1, 0, -1):
@@ -89,6 +95,9 @@ class RunPlan:
                     end_latitude = self.plan_args["points"][i - 1][1]
 
                     sum_distance += self.AtoB(start_longitude, end_longitude, start_latitude, end_latitude)
+                    # 超过4km后，结束跑步
+                    if sum_distance >= self.plan_args["distance"]:
+                        break
 
             elif self.plan_args["mode"] == 'single_trip':
                 break

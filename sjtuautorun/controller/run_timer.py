@@ -111,7 +111,7 @@ class Timer(Emulator):
         self.Android.click(pos[0], pos[1], delay=delay)
         return True
 
-    def end(self):
+    def end_run(self):
         # 暂停
         pos = self.wait_image(IMG.run_image[2])
         if not pos:
