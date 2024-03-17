@@ -103,7 +103,7 @@ class WindowsController:
             bool: 在线返回 True, 否则返回 False
         """
         raw_res = self.ldconsole("isrunning")
-        self.logger.debug("Emulator status: " + raw_res)
+        self.logger.debug("Emulator status", raw_res)
         return raw_res == "running"
 
     def kill_android(self):
