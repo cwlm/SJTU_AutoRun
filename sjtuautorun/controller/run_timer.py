@@ -32,7 +32,7 @@ class Timer(Emulator):
 
         # 识别是否存在搜索框
         ret = self.wait_image(IMG.start_image[1])
-        if ret is None:
+        if not ret:
             self.set_text_size()
             self.restart()
             return
