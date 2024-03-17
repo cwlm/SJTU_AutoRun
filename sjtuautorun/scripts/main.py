@@ -2,6 +2,8 @@ import datetime
 import os
 import shutil
 import winreg
+import requests
+from importlib.metadata import version, distribution, PackageNotFoundError
 from types import SimpleNamespace
 
 import sjtuautorun
@@ -69,6 +71,7 @@ def start_script(settings_path=None):
     Returns:
         Timer: 该模拟器的记录器
     """
+    check_for_updates()
     config, logger = initialize_logger_and_config(settings_path)
     timer = Timer(config, logger)
     return timer
@@ -79,6 +82,7 @@ def start_script_emulator(settings_path):
     Returns:
         Emulator: 该模拟器的记录器
     """
+    check_for_updates()
     config, logger = initialize_logger_and_config(settings_path)
     emulator = Emulator(config, logger)
     return emulator
@@ -98,3 +102,27 @@ def get_emulator_path():
     except FileNotFoundError:
         print("Emulator not found")
         return None
+
+
+def check_for_updates():
+    try:
+        distribution('sjtuautorun')
+    except PackageNotFoundError as e:
+        print(f"Package {e} not found, skipping update check.")
+        return
+
+    # Query PyPI index to get the latest version
+    response = requests.get(f'https://pypi.org/pypi/sjtuautorun/json')
+    if response.status_code == 200:
+        data = response.json()
+        latest_version = data['info']['version']
+        installed_version = version("sjtuautorun")
+
+        # Compare installed version with the latest version
+        if installed_version != latest_version:
+            print(f"Version {installed_version} can be updated to {latest_version}!")
+            print("Use command \"pip install -U sjtuautorun\" to upgrade.")
+        else:
+            print("Already the latest version.")
+    else:
+        print("Failed to fetch latest version information.")
