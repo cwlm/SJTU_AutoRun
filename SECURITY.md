@@ -1,27 +1,27 @@
-# Security Policy
+# 安全策略
 
-## Reporting a Vulnerability
+## 报告漏洞
 
-If you discover a security vulnerability in this project, please follow these steps:
+如果您发现了这个项目中的安全漏洞，请按照以下步骤操作：
 
-1. **Do not create a public GitHub issue.** Security vulnerabilities should be reported privately.
+1. **不要创建公开的 GitHub 问题。** 安全漏洞应该私下报告。
 
-2. [Email us](mailto:csc123456zxcvbnm@gmail.com) with a description of the vulnerability and steps to reproduce.
+2. [通过邮件联系我们](mailto:csc123456zxcvbnm@gmail.com)，提供漏洞描述和重现步骤。
 
-3. Allow some time for the project maintainers to review and respond to your report.
+3. 请给项目维护人员一些时间来审查并回复您的报告。
 
-4. Once the issue is confirmed, we will work on addressing it and may release a fix.
+4. 一旦问题被确认，我们将致力于解决，并可能发布修复补丁。
 
-## Security Measures
+## 安全措施
 
-We take the security of our project seriously. Here are some of the measures we have in place:
+我们认真对待项目的安全性。以下是我们采取的一些措施：
 
-- Regular security reviews and audits of our codebase.
+- 定期审查和审核我们的代码库。
 
-- Encouraging responsible disclosure by providing a private channel for reporting vulnerabilities.
+- 鼓励负责任的披露，提供私密渠道报告漏洞。
 
-- Promptly addressing reported vulnerabilities and releasing updates.
+- 及时处理报告的漏洞并发布更新。
 
-## Acknowledgements
+## 致谢
 
-We would like to thank the security researchers and contributors who have responsibly disclosed vulnerabilities or contributed to the security of this project.
+感谢所有披露漏洞或为该项目的安全做出贡献的安全研究人员和贡献者。
