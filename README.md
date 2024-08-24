@@ -1,8 +1,20 @@
 # 交我润 (SJTU_AutoRun)
 
+## 目录
+
+- [项目简介](#项目简介)
+- [使用方法](#使用方法)
+- [近期更新](#近期更新)
+- [目前实现的功能](#目前实现的功能)
+- [未来开发任务](#未来开发任务)
+
 ## 项目简介
 
-![](https://img.shields.io/github/repo-size/cwlm/SJTU_AutoRun) ![](https://img.shields.io/pypi/v/sjtuautorun) ![](https://img.shields.io/pypi/dm/sjtuautorun) ![](https://img.shields.io/github/issues/cwlm/SJTU_AutoRun) ![MIT licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg)
+![](https://img.shields.io/github/repo-size/cwlm/SJTU_AutoRun)
+![](https://img.shields.io/pypi/v/sjtuautorun)
+![](https://img.shields.io/pypi/dm/sjtuautorun)
+![](https://img.shields.io/github/issues/cwlm/SJTU_AutoRun)
+![MIT licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 
 基于雷电模拟器的上海交通大学自动跑步脚本，脱胎于[AutoWSGR](https://github.com/huan-yp/Auto-WSGR)
 
@@ -12,6 +24,8 @@
 
 ## 近期更新
 
+- 修改版本号逻辑，去掉第一位 *2024/08/24*
+- 为迎合gui更新至python3.11 *2024/08/24*
 - 脚本启动时会检测更新 *2024/03/18*
 - 修复了无法自动调整字体的问题 *2024/03/17*
 - 修复了无法自动关闭交我办更新页的问题 *2024/03/12*
@@ -27,14 +41,19 @@
 - 重构跑步逻辑，实现不同跑步计划 *2024/03/02*
 - 完成脚本基本逻辑，实现单个短程自动跑步 *2024/02/26*
 
-## 未来开发任务
+## 目前实现的功能
 
-- [ ] 定时启动
-- [ ] 实现较为准确的距离控制
 - [x] 撰写不同跑步策略（如光体、南体跑圈等）
 - [x] 实现自动结束
-- [ ] 适配不同交我办语言
 - [x] 随机化跑步数据
 - [x] 调整图像识别模块，实现自动启动
 - [x] 兼容不同跑步策略
 
+## 未来开发任务
+
+顺序代表开发优先级
+
+- [ ] GUI
+- [ ] 定时启动
+- [ ] 实现较为准确的距离控制
+- [ ] 适配不同交我办语言
