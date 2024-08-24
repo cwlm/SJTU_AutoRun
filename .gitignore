@@ -3,9 +3,9 @@ log/
 tmp/
 tests/
 .vscode/
-autowsgr/bin/image_recognize/*.PNG
-autowsgr/bin/image_recognize/*.in
-autowsgr/bin/image_recognize/*.out
+sjtuautorun/bin/image_recognize/*.PNG
+sjtuautorun/bin/image_recognize/*.in
+sjtuautorun/bin/image_recognize/*.out
 system_test.py
 
 # Package Release

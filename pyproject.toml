@@ -12,7 +12,8 @@ license = "MIT"
 
 
 [tool.poetry.dependencies]
-python = "3.9"
+python = "3.11"
+numpy = "1.26.4"
 pre-commit = "^3.5.0"
 opencv-python = "4.5.4.60"
 opencv-contrib-python = "4.5.4.60"
