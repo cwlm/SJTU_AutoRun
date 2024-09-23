@@ -1,1 +1,6 @@
-__version__ = "0.3.1.0"
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("sjtuautorun")
+except PackageNotFoundError:
+    __version__ = "unknown"
