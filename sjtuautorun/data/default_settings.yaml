@@ -1,6 +1,6 @@
 emulator:
   emulator_dir: ""
-  emulator_name: emulator-5554 # 雷电模拟器使用多开器请修改该项为 "emulator-5556"
+  emulator_index: 1 # 雷电模拟器使用多开器请修改该项为对应的模拟器id
 
 DELAY: 1.5
 PLAN_ROOT:
