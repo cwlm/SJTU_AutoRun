@@ -26,10 +26,10 @@ class WindowsController:
     def __init__(self, config, logger) -> None:
         self.logger = logger
 
-        self.emulator_name = config["emulator_name"]
         self.emulator_dir = config["emulator_dir"]  # 模拟器路径
         self.exe_name = os.path.basename(self.emulator_dir)  # 自动获得模拟器的进程名
-        self.emulator_index = (int(re.search(r'\d+', self.emulator_name).group()) - 5554) / 2
+        self.emulator_index = config["emulator_index"]  # 模拟器序号
+        self.emulator_name = f"emulator-{5554+self.emulator_index*2}"  # 模拟器名
 
     # ======================== 网络 ========================
 

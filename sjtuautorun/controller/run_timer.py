@@ -54,7 +54,7 @@ class Timer(Emulator):
         if pos is None:
             raise ImageNotFoundErr("Cannot find the go running icon")
         self.Android.click(pos[0], pos[1])
-        self.logger.info("Start successfully!")
+        self.logger.info("Started successfully!")
 
     def restart(self, times=0):
         try:
