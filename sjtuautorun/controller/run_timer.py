@@ -66,7 +66,7 @@ class Timer(Emulator):
         # 检测跑步图标
         ret = self.wait_image(IMG.start_image[2], timeout = 5)
         if not ret:
-            self.logger.warning("Cannot find the go running icon, restarting...")
+            self.logger.warning("Cannot find the go running icon, restarting..." + f"Restarting trial {times}.")
             self.start(times + 1)
             return
         else:
