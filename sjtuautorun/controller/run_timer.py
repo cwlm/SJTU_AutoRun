@@ -38,7 +38,7 @@ class Timer(Emulator):
             return
 
         # 等待app启动
-        ret = self.wait_images([IMG.start_image[1], IMG.update_image[1]], timeout = 10 * (times + 1))
+        ret = self.wait_images([IMG.start_image[1], IMG.update_image[1]], timeout = 20 + 15 * times)
         if ret is None:
             self.logger.warning("Cannot find the searching bar, restarting..." + f"Restarting trial {times}.")
             self.start(times + 1)
