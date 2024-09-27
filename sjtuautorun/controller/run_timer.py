@@ -24,7 +24,7 @@ class Timer(Emulator):
         self.app_name = "edu.sjtu.infoplus.taskcenter"
         self.start()
 
-    def start(self, times = 0):
+    def start(self, times=0):
         if times >= 3:
             raise CriticalErr("Critical Err when starting.")
 
@@ -38,21 +38,21 @@ class Timer(Emulator):
             return
 
         # 等待app启动
-        ret = self.wait_images([IMG.start_image[1], IMG.update_image[1]], timeout = 20 + 15 * times)
+        ret = self.wait_images([IMG.start_image[1], IMG.update_image[1]], timeout=20 + 15 * times)
         if ret is None:
             self.logger.warning("Cannot find the searching bar, restarting..." + f"Restarting trial {times}.")
             self.start(times + 1)
             return
 
             # 检查更新窗口
-        ret = self.wait_image(IMG.update_image[1], timeout = 5)
+        ret = self.wait_image(IMG.update_image[1], timeout=5)
         if ret:
             self.logger.info("Update Pop-up found, restarting...")
             self.start(times)
             return
 
             # 检测搜索框
-        ret = self.wait_image(IMG.start_image[1], timeout = 5)
+        ret = self.wait_image(IMG.start_image[1], timeout=5)
         if not ret:
             self.logger.warning("Cannot find the searching bar, restarting...")
             self.start(times + 1)
@@ -64,9 +64,19 @@ class Timer(Emulator):
         self.text("去跑步")
 
         # 检测跑步图标
-        ret = self.wait_image(IMG.start_image[2], timeout = 5)
+        ret = self.wait_image(IMG.start_image[2], timeout=5)
         if not ret:
-            self.logger.warning("Cannot find the go running icon, restarting..." + f"Restarting trial {times}.")
+            self.logger.warning("Cannot find the go running icon in searching bar, restarting..." +
+                                f"Restarting trial {times}.")
+            self.start(times + 1)
+            return
+        else:
+            self.Android.click(ret[0], ret[1])
+
+        ret = self.wait_image(IMG.start_image[3], timeout=5)
+        if not ret:
+            self.logger.warning("Cannot find the go running icon, restarting..." +
+                                f"Restarting trial {times}.")
             self.start(times + 1)
             return
         else:
@@ -79,6 +89,7 @@ class Timer(Emulator):
         Args:
             must_confirm (int, optional): 是否必须按. Defaults to 0.
             delay (float, optional): 点击后延时(秒). Defaults to 0.5.
+            confidence (float, optional): 置信度. Defaults to 0.9.
             timeout (int, optional): 等待延时(秒),负数或 0 不等待. Defaults to 0.
 
         Raises:
