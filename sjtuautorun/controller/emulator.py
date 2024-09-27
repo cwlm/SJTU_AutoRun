@@ -238,6 +238,7 @@ class Emulator:
 
         Args:
             timeout (int, optional): 最大等待时间. Defaults to 10.
+
         Returns:
             如果在 timeout 秒内发现,返回一个二元组表示其相对(960x540 屏幕)位置
 
