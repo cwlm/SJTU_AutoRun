@@ -22,14 +22,20 @@ def check_for_updates():
     local_version = get_local_version()
 
     # 发送 GET 请求获取库的元数据信息
-    response = requests.get("https://pypi.tuna.tsinghua.edu.cn/pypi/sjtuautorun/json")
-    data = response.json()
-
-    # 提取最新版本号
-    latest_version = data["info"]["version"]
+    try:
+        response = requests.get("https://pypi.tuna.tsinghua.edu.cn/pypi/sjtuautorun/json")
+        data = response.json()
+        latest_version = data["info"]["version"]
+    except requests.ConnectionError:
+        print("No network connection, skipping update check.")
+        latest_version = None
 
     if local_version is None:
         print("Failed to get the local version, skipping update check.")
+        return
+
+    if latest_version is None:
+        print("Failed to get the latest version, skipping update check.")
         return
 
     # 比较版本号
@@ -37,7 +43,8 @@ def check_for_updates():
         update_questions = [
             inquirer.List(
                 "source",
-                message=f"New version {latest_version} is available.Your version is {local_version}. Do you want to update?",
+                message=f"New version {latest_version} is available.Your version is {local_version}. Do you want to "
+                        f"update?",
                 choices=["Yes", "No"],
             ),
         ]
