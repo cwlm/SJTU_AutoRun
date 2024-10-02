@@ -38,9 +38,11 @@ class Timer(Emulator):
             return
 
         # 等待app启动
-        ret = self.wait_images([IMG.start_image[1], IMG.update_image[1]], timeout=20 + 15 * times)
+        ret = self.wait_images(
+            [IMG.start_image[1], IMG.update_image[1]], timeout=20 + 15 * times)
         if ret is None:
-            self.logger.warning("Cannot find the searching bar, restarting..." + f"Restarting trial {times}.")
+            self.logger.warning(
+                "Cannot find the searching bar, restarting..." + f"Restarting trial {times}.")
             self.start(times + 1)
             return
 
@@ -73,14 +75,14 @@ class Timer(Emulator):
         else:
             self.Android.click(ret[0], ret[1])
 
-        ret = self.wait_image(IMG.start_image[3], timeout=5)
-        if not ret:
-            self.logger.warning("Cannot find the go running icon, restarting..." +
-                                f"Restarting trial {times}.")
-            self.start(times + 1)
-            return
-        else:
-            self.Android.click(ret[0], ret[1])
+        # ret = self.wait_image(IMG.start_image[3], timeout=5)
+        # if not ret:
+        #     self.logger.warning("Cannot find the go running icon, restarting..." +
+        #                         f"Restarting trial {times}.")
+        #     self.start(times + 1)
+        #     return
+        # else:
+        #     self.Android.click(ret[0], ret[1])
             self.logger.info("Started successfully!")
 
     def confirm(self, must_confirm=0, delay=0.5, confidence=0.9, timeout=0):
@@ -97,12 +99,14 @@ class Timer(Emulator):
         Returns:
             bool:True 为成功,False 为失败
         """
-        ret = self.wait_images(IMG.confirm_image[1:], confidence=confidence, timeout=timeout)
+        ret = self.wait_images(
+            IMG.confirm_image[1:], confidence=confidence, timeout=timeout)
         if ret is None:
             if must_confirm == 1:
                 raise ImageNotFoundErr("no confirm image found")
             else:
                 return False
-        pos = self.get_image_position(IMG.confirm_image[ret + 1], confidence=confidence, need_screen_shot=0)
+        pos = self.get_image_position(
+            IMG.confirm_image[ret + 1], confidence=confidence, need_screen_shot=0)
         self.Android.click(pos[0], pos[1], delay=delay)
         return True
