@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "sjtuautorun"
-version = "0.3.1.4"
+version = "0.3.2.0"
 description = "交我润"
 readme = "README.md"
 authors = ["cwlm_ma"]
@@ -18,6 +18,7 @@ opencv-python = "4.10.0.84"
 airtest = "^1.3.1"
 easyocr = "^1.7.1"
 geopy = "^2.4.1"
+inquirer = "^3.2.4"
 
 [tool.poetry-version-plugin]
 source = "init"

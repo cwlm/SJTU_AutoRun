@@ -2,14 +2,13 @@ import datetime
 import os
 import shutil
 import winreg
-import requests
-from importlib.metadata import version, distribution, PackageNotFoundError
 from types import SimpleNamespace
 
 import sjtuautorun
 from sjtuautorun.controller.run_timer import Emulator, Timer
 from sjtuautorun.utils.io import recursive_dict_update, yaml_to_dict, dict_to_yaml
 from sjtuautorun.utils.new_logger import Logger
+from sjtuautorun.utils.update import check_for_updates
 
 event_pressed = set()
 script_end = 0
@@ -102,27 +101,3 @@ def get_emulator_path():
     except FileNotFoundError:
         print("Emulator not found")
         return None
-
-
-def check_for_updates():
-    try:
-        distribution('sjtuautorun')
-    except PackageNotFoundError as e:
-        print(f"Package {e} not found, skipping update check.")
-        return
-
-    # Query PyPI index to get the latest version
-    response = requests.get(f'https://pypi.org/pypi/sjtuautorun/json')
-    if response.status_code == 200:
-        data = response.json()
-        latest_version = data['info']['version']
-        installed_version = version("sjtuautorun")
-
-        # Compare installed version with the latest version
-        if installed_version != latest_version:
-            print(f"Version {installed_version} can be updated to {latest_version}!")
-            print("Use command \"pip install -U sjtuautorun\" to upgrade.")
-        else:
-            print("Already the latest version.")
-    else:
-        print("Failed to fetch latest version information.")
