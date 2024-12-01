@@ -116,6 +116,11 @@ class Emulator:
             failure_msg=f"Failed to stop app {app_name} after maximum retries."
         )
 
+    def change_location(self, longitude: float, latitude: float) -> bool:
+        logging.info(f"Changing location to ({longitude}, {latitude})...")
+        return self.manager_run(
+            ['control', 'tool', 'location', '--longitude', str(longitude), '--latitude', str(latitude)]).returncode == 0
+
     def adb_run(self, command: list[str]):
         return subprocess.run([self.adb, *command], capture_output=True, text=True, encoding='utf-8')
 
@@ -123,38 +128,3 @@ class Emulator:
         self.__refresh_info__()
         ip = f"{self.info['adb_host_ip']}:{self.info['adb_port']}"
         return self.adb_run(['connect', ip]).returncode == 0
-
-
-import yaml
-
-if __name__ == '__main__':
-    with open('../data/default_settings.yaml', 'r', encoding='utf-8') as file:
-        config = yaml.safe_load(file)
-
-    logging.basicConfig(level=logging.INFO)
-
-    emulator = Emulator(config['emulator'])
-
-    emulator.start()
-
-    emulator.start_app("edu.sjtu.infoplus.taskcenter")
-
-    emulator.adb_connect()
-
-    result = subprocess.run([emulator.adb, 'exec-out', 'screencap', '-p'], stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            check=True)
-    png_data = np.frombuffer(result.stdout, dtype=np.uint8)
-    image = cv2.imdecode(png_data, cv2.IMREAD_COLOR)
-    if image is None:
-        raise ValueError("Failed to decode the screenshot image. Check adb output.")
-    # 缩小图像
-    scale_percent = 50  # 将图像缩小为原来的 50%
-    width = int(image.shape[1] * scale_percent / 100)
-    height = int(image.shape[0] * scale_percent / 100)
-    dim = (width, height)
-
-    resized_image = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
-    cv2.imshow("Screenshot", resized_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
