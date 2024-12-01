@@ -52,7 +52,7 @@ class Emulator:
             action: Callable[[], Any],
             condition: Callable[[], bool],
             max_retries: int,
-            delay: int,
+            timeout: int,
             success_msg: str,
             failure_msg: str
     ) -> bool:
@@ -63,7 +63,7 @@ class Emulator:
         while retry_count < max_retries:
             action()
             start_time = time.time()
-            while time.time() - start_time < delay:
+            while time.time() - start_time < timeout:
                 if condition():
                     logging.info(success_msg)
                     return True
@@ -78,7 +78,7 @@ class Emulator:
             action=lambda: self.manager_run(['control', 'launch']),
             condition=self.check_running,
             max_retries=max_retries,
-            delay=10,
+            timeout=10,
             success_msg="Manager started successfully.",
             failure_msg="Failed to start the manager after maximum retries."
         )
@@ -89,7 +89,7 @@ class Emulator:
             action=lambda: self.manager_run(['control', 'shutdown']),
             condition=lambda: not self.check_running(),
             max_retries=max_retries,
-            delay=5,  # 停机可以更快地重试
+            timeout=3,  # 停机可以更快地重试
             success_msg="Manager stopped successfully.",
             failure_msg="Failed to stop the manager after maximum retries."
         )
@@ -100,9 +100,20 @@ class Emulator:
             action=lambda: self.manager_run(['control', 'app', 'launch', '-pkg', app_name]),
             condition=lambda: self.get_app_state(app_name) == AppState.RUNNING,
             max_retries=max_retries,
-            delay=10,
+            timeout=10,
             success_msg=f"App {app_name} started successfully.",
             failure_msg=f"Failed to start app {app_name} after maximum retries."
+        )
+
+    def close_app(self, app_name: str, max_retries=3) -> bool:
+        logging.info(f"Stopping app {app_name}...")
+        return self.__execute_with_retries__(
+            action=lambda: self.manager_run(['control', 'app', 'close', '-pkg', app_name]),
+            condition=lambda: self.get_app_state(app_name) == AppState.STOPPED,
+            max_retries=max_retries,
+            timeout=3,
+            success_msg=f"App {app_name} stopped successfully.",
+            failure_msg=f"Failed to stop app {app_name} after maximum retries."
         )
 
 
@@ -119,3 +130,7 @@ if __name__ == '__main__':
     emulator.start()
 
     emulator.start_app("edu.sjtu.infoplus.taskcenter")
+
+    emulator.close_app("edu.sjtu.infoplus.taskcenter")
+
+    emulator.shutdown()
