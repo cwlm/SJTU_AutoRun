@@ -2,7 +2,7 @@ import re
 import subprocess
 import sys
 import time
-from importlib.metadata import distribution, PackageNotFoundError, version
+from importlib.metadata import PackageNotFoundError, version
 from packaging.version import parse
 import inquirer
 import requests
@@ -53,9 +53,8 @@ def check_for_updates():
             # 选择使用哪个源更新,输出按钮回车选择
             choice = get_user_choice(update_source)
             update_library(choice)
-            recent_updates = get_recent_updates_from_pypi(latest_version)
-            print("更新内容:\n" + recent_updates)
-
+            # recent_updates = get_recent_updates_from_pypi(latest_version)
+            # print("更新内容:\n" + recent_updates)
             print("更新完成，稍后将自动退出，请重新启动脚本")
             time.sleep(5)
             sys.exit(0)  # 更新成功后退出脚本_exit(0)  # 更新成功后退出脚本
@@ -137,5 +136,3 @@ def get_recent_updates_from_pypi(latest_version):
     else:
         return f"无法获取更新内容，状态码: {response.status_code}"
 
-# if __name__ == "__main__":
-#     check_for_updates()
