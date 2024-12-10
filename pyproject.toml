@@ -4,12 +4,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "sjtuautorun"
-version = "0.3.2.0"
+version = "0.3.2.1"
 description = "交我润"
 readme = "README.md"
 authors = ["cwlm_ma"]
 license = "MIT"
-
 
 [tool.poetry.dependencies]
 python = "3.11"
