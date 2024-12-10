@@ -38,7 +38,10 @@ class Emulator:
 
     def check_running(self) -> bool:
         self.__refresh_info__()
-        return self.info['is_android_started']
+        if 'player_state' not in self.info:
+            return False
+        else:
+            return self.info['player_state'] == 'start_finished'
 
     def get_app_state(self, app_name) -> AppState:
         result = self.manager_run(['control', 'app', 'info', '-pkg', app_name])

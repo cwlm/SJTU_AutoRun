@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import subprocess
 import logging
+import time
 
 from sjtuautorun.controller.emulator import Emulator
 
@@ -61,8 +62,9 @@ class ScreenManager:
 
     def find_template_in_screen(self, template: np.ndarray, template_resolution: (int, int) = (1920, 1080), threshold: float = 0.99):
         self.update_screen()
-        if self.resolution is None:
+        while self.resolution is None:
             self.get_resolution()
+            time.sleep(1)
         screen_resized = cv2.resize(self.screen, None,
                                     fx=template_resolution[0] / self.resolution[0],
                                     fy=template_resolution[1] / self.resolution[1],
