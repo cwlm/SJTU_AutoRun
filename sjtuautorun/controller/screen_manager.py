@@ -76,9 +76,8 @@ class ScreenManager:
         start_x, start_y = max_loc
         centre_x, centre_y = (start_x + template.shape[1] // 2, start_y + template.shape[0] // 2)
 
-        # Calculate the start and end points of the bounding box
-        start_x, start_y = max_loc
-
+        # # Calculate the start and end points of the bounding box
+        # start_x, start_y = max_loc
         # end_x = start_x + template.shape[1]
         # end_y = start_y + template.shape[0]
         # # Draw the rectangle on the screen image
