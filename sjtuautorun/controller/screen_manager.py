@@ -20,7 +20,8 @@ class ScreenManager:
         output = result.stdout.strip()
         if "Physical size" in output:
             resolution = output.split(":")[1].strip()
-            self.resolution = list(map(int, resolution.split("x")))
+            x,y = list(map(int, resolution.split("x")))
+            self.resolution = (y, x) # The resolution is in the format of "height x weight"
             return True
         else:
             raise ValueError("Failed to parse screen resolution.")
@@ -58,7 +59,7 @@ class ScreenManager:
 
         logging.info("Screen successfully updated.")
 
-    def find_template_in_screen(self, template: np.ndarray, template_resolution: (int, int), threshold: float = 0.1):
+    def find_template_in_screen(self, template: np.ndarray, template_resolution: (int, int) = (1920, 1080), threshold: float = 0.99):
         self.update_screen()
         if self.resolution is None:
             self.get_resolution()
@@ -68,7 +69,7 @@ class ScreenManager:
                                     interpolation=cv2.INTER_AREA)
         screen_gray = cv2.cvtColor(screen_resized, cv2.COLOR_BGR2GRAY)
         template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
-        result = cv2.matchTemplate(screen_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+        result = cv2.matchTemplate(screen_gray, template_gray, cv2.TM_CCORR_NORMED )
         _, max_val, _, max_loc = cv2.minMaxLoc(result)
         if max_val < threshold:
             return None
@@ -77,16 +78,16 @@ class ScreenManager:
 
         # Calculate the start and end points of the bounding box
         start_x, start_y = max_loc
-        end_x = start_x + template.shape[1]
-        end_y = start_y + template.shape[0]
 
-        # Draw the rectangle on the screen image
-        cv2.rectangle(screen_resized, (start_x, start_y), (end_x, end_y), (0, 255, 0), 2)
-
-        # Optionally show the image with the rectangle
-        cv2.imshow("Matched Screen", screen_resized)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        # end_x = start_x + template.shape[1]
+        # end_y = start_y + template.shape[0]
+        # # Draw the rectangle on the screen image
+        # cv2.rectangle(screen_resized, (start_x, start_y), (end_x, end_y), (0, 255, 0), 2)
+        #
+        # # Optionally show the image with the rectangle
+        # cv2.imshow("Matched Screen", screen_resized)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
         return centre_x, centre_y
 
@@ -111,4 +112,4 @@ if __name__ == '__main__':
 
     screen_manager.get_resolution()
 
-    print(screen_manager.find_template_in_screen(cv2.imread('../data/images/start_image/1.png'), (540, 960)))
+    print(screen_manager.find_template_in_screen(cv2.imread('../data/images/start_image/1.png')))
