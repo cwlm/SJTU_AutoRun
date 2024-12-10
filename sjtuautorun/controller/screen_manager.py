@@ -4,6 +4,8 @@ import subprocess
 import logging
 import time
 
+from airtest.core.api import swipe
+
 from sjtuautorun.controller.emulator import Emulator
 
 
@@ -92,6 +94,17 @@ class ScreenManager:
 
         return centre_x, centre_y
 
+    def click(self, location: (int, int)):
+        x, y = location
+        self.emulator.adb_run(['shell', 'input', 'tap', str(x), str(y)])
+
+    def swipe(self, start: (int, int), end: (int, int), duration: int):
+        start_x, start_y = start
+        end_x, end_y = end
+        self.emulator.adb_run(['shell', 'input', 'swipe', str(start_x), str(start_y), str(end_x), str(end_y), str(duration)])
+
+    def press(self, location: (int, int), duration: int):
+        self.swipe(location, location, duration)
 
 import yaml
 
@@ -113,4 +126,6 @@ if __name__ == '__main__':
 
     screen_manager.get_resolution()
 
-    print(screen_manager.find_template_in_screen(cv2.imread('../data/images/start_image/1.png')))
+    loc_1 = screen_manager.find_template_in_screen(cv2.imread('../data/images/start_image/1.png'))
+
+    screen_manager.click(loc_1)
