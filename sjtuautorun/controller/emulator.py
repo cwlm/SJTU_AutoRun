@@ -87,7 +87,7 @@ class Emulator:
         logging.info("Shutting down emulator...")
         return self.__execute_with_retries__(
             action=lambda: self.manager_run(['control', 'shutdown']),
-            condition=lambda: not self.check_running(),
+            condition=lambda: not self.check_running,
             max_retries=max_retries,
             timeout=3,  # 停机可以更快地重试
             success_msg="Manager stopped successfully.",
