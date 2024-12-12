@@ -2,7 +2,7 @@ import re
 import subprocess
 import sys
 import time
-from importlib.metadata import distribution, PackageNotFoundError, version
+from importlib.metadata import PackageNotFoundError, version
 from packaging.version import parse
 import inquirer
 import requests
@@ -11,7 +11,7 @@ update_source = [
     inquirer.List(
         "source",
         message="Please choose the source to update",
-        choices=["清华源", "北京外国语", "PyPI"],
+        choices=["清华源", "北京外国语", "ustc", "PyPI"],
     ),
 ]
 
@@ -23,11 +23,11 @@ def check_for_updates():
 
     # 发送 GET 请求获取库的元数据信息
     try:
-        response = requests.get("https://pypi.tuna.tsinghua.edu.cn/pypi/sjtuautorun/json")
+        response = requests.get('https://mirrors.ustc.edu.cn/pypi/json/sjtuautorun')
         data = response.json()
         latest_version = data["info"]["version"]
-    except requests.ConnectionError:
-        print("No network connection, skipping update check.")
+    except Exception as e:
+        print(f"Failed to get the latest version: {e}")
         latest_version = None
 
     if local_version is None:
@@ -53,9 +53,8 @@ def check_for_updates():
             # 选择使用哪个源更新,输出按钮回车选择
             choice = get_user_choice(update_source)
             update_library(choice)
-            recent_updates = get_recent_updates_from_pypi(latest_version)
-            print("更新内容:\n" + recent_updates)
-
+            # recent_updates = get_recent_updates_from_pypi(latest_version)
+            # print("更新内容:\n" + recent_updates)
             print("更新完成，稍后将自动退出，请重新启动脚本")
             time.sleep(5)
             sys.exit(0)  # 更新成功后退出脚本_exit(0)  # 更新成功后退出脚本
@@ -65,20 +64,10 @@ def check_for_updates():
 
 def get_local_version():
     try:
-        distribution('sjtuautorun')
-    except PackageNotFoundError as e:
-        print(f"Package {e} not found, skipping update check.")
-        return
-
-    # Query PyPI index to get the latest version
-    response = requests.get(f'https://pypi.org/pypi/sjtuautorun/json')
-    if response.status_code == 200:
-        data = response.json()
-        installed_version = version("sjtuautorun")
-        return installed_version
-    else:
-        return f"Failed to get the latest version, status code: {response.status_code}"
-
+        return version("sjtuautorun")
+    except PackageNotFoundError:
+        print("sjtuautorun is not installed.")
+        return None
 
 def get_user_choice(questions):
     answers = inquirer.prompt(questions)
@@ -111,12 +100,19 @@ def update_library(choice="PyPI"):
             "--upgrade",
             "sjtuautorun",
         ],
+        "ustc": [
+            "pip",
+            "install",
+            "--index-url",
+            "https://mirrors.ustc.edu.cn/pypi/web/simple/",
+            "--upgrade",
+            "sjtuautorun",
+        ],
     }
     subprocess.run(choice_list[choice])
 
 
 def get_recent_updates_from_pypi(latest_version):
-
     url = f"https://pypi.org/project/sjtuautorun/{latest_version}/#description"
     response = requests.get(url)
 
@@ -140,6 +136,3 @@ def get_recent_updates_from_pypi(latest_version):
     else:
         return f"无法获取更新内容，状态码: {response.status_code}"
 
-
-# if __name__ == "__main__":
-#     check_for_updates()
